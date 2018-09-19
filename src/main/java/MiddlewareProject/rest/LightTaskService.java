@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class LightTaskService {
 
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<Task> solveLightTask(@RequestBody LightTask lightTask) {
+    public ResponseEntity<String> solveLightTask(@RequestBody LightTask lightTask) {
 
+        System.out.println(lightTask);
         //solve light task
+        System.out.println("id : "+lightTask.getID()+" type : "+lightTask.getType()+ " string : "+lightTask.getToEncrypt());
         System.out.println("Task n° "+lightTask.getID() +" Received");
 
-        return new ResponseEntity<>(lightTask, HttpStatus.OK);
+        return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
     @RequestMapping(path = "", method = RequestMethod.GET)
