@@ -1,5 +1,6 @@
 package MiddlewareProject.rest;
 
+import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.MediumTask;
 import MiddlewareProject.task.Task;
 import org.springframework.http.HttpStatus;
@@ -15,24 +16,12 @@ import java.util.ArrayList;
 @RequestMapping(path = "medium")
 public class MediumTaskService {
 
-    private ArrayList<MediumTask> mediumList = new ArrayList<>();
-
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveMediumTask(@RequestBody MediumTask mediumTask) {
 
-        mediumList.add(mediumTask);
-        System.out.println("Task n° "+mediumTask.getID() +" Received");
-        System.out.println(mediumList);
+        TaskHandler.getInstance().addMediumTask(mediumTask);
         return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
-    public ArrayList<MediumTask> getLightList() {
-        return mediumList;
-    }
-
-    public void updateLightTask(MediumTask task){
-        int index = mediumList.indexOf(task);
-        mediumList.set(index,task);
-    }
 
 }

@@ -1,5 +1,6 @@
 package MiddlewareProject.rest;
 
+import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.HeavyTask;
 import MiddlewareProject.task.Task;
 import org.springframework.http.HttpStatus;
@@ -15,23 +16,11 @@ import java.util.ArrayList;
 @RequestMapping(path = "heavy")
 public class HeavyTaskService {
 
-    private ArrayList<HeavyTask> heavyList = new ArrayList<>();
-
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveHeavyTask(@RequestBody HeavyTask heavyTask) {
 
-        heavyList.add(heavyTask);
-        System.out.println("Task n° "+heavyTask.getID() +" Received");
-        System.out.println(heavyList);
+        TaskHandler.getInstance().addHeavyTask(heavyTask);
         return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
-    public ArrayList<HeavyTask> getLightList() {
-        return heavyList;
-    }
-
-    public void updateLightTask(HeavyTask task){
-        int index = heavyList.indexOf(task);
-        heavyList.set(index,task);
-    }
 }

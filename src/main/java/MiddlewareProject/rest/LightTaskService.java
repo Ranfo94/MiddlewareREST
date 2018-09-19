@@ -1,6 +1,7 @@
 package MiddlewareProject.rest;
 
 
+import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.Task;
 import org.springframework.http.HttpStatus;
@@ -16,27 +17,12 @@ import java.util.ArrayList;
 @RequestMapping(path = "light")
 public class LightTaskService {
 
-    private ArrayList<LightTask> lightList = new ArrayList<>();
-
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveLightTask(@RequestBody LightTask lightTask) {
 
-        lightList.add(lightTask);
-
-        //solve light task
-        System.out.println("Task n° "+lightTask.getID() +" Received");
-        System.out.println(lightList);
+        TaskHandler.getInstance().addLightTask(lightTask);
 
         return new ResponseEntity<>("ACK", HttpStatus.OK);
-    }
-
-    public ArrayList<LightTask> getLightList() {
-        return lightList;
-    }
-
-    public void updateLightTask(LightTask task){
-        int index = lightList.indexOf(task);
-        lightList.set(index,task);
     }
 
 }
