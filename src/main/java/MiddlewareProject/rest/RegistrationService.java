@@ -1,10 +1,6 @@
 package MiddlewareProject.rest;
 
-
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.Task;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import MiddlewareProject.entities.Node;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,22 +9,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "light")
-public class LightTaskService {
+@RequestMapping(path = "registration")
+public class RegistrationService {
 
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<Task> solveLightTask(@RequestBody LightTask lightTask) {
-
-        //solve light task
-        System.out.println("Task n° "+lightTask.getID() +" Received " + lightTask.getType());
-
-        return new ResponseEntity<>(lightTask, HttpStatus.OK);
+    public ResponseEntity<Node> fogNodeRegistration(@RequestBody Node node) {
+        return new ResponseEntity<>(node, HttpStatus.OK);
     }
 
     @RequestMapping(path = "", method = RequestMethod.GET)
     public String hello() {
 
-        return "HELLO WORLD!";
+        return "HELLO WORLDdddd!";
     }
-
 }
