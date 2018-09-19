@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MiddlewareTask {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
+    private static final AtomicInteger count = new AtomicInteger(-1);
     private int middlewareID;
     private Task task;
 
