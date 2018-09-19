@@ -9,23 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(path = "heavy")
 public class HeavyTaskService {
 
+    private ArrayList<HeavyTask> heavyList = new ArrayList<>();
+
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveHeavyTask(@RequestBody HeavyTask heavyTask) {
 
-        System.out.println("id : "+heavyTask.getID()+" type : "+heavyTask.getType());
-
+        heavyList.add(heavyTask);
         System.out.println("Task n° "+heavyTask.getID() +" Received");
-
+        System.out.println(heavyList);
         return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public String hello() {
+    public ArrayList<HeavyTask> getLightList() {
+        return heavyList;
+    }
 
-        return "HELLO WORLD!";
+    public void updateLightTask(HeavyTask task){
+        int index = heavyList.indexOf(task);
+        heavyList.set(index,task);
     }
 }

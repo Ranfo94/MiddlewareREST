@@ -10,25 +10,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(path = "light")
 public class LightTaskService {
 
+    private ArrayList<LightTask> lightList = new ArrayList<>();
+
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveLightTask(@RequestBody LightTask lightTask) {
 
-        System.out.println(lightTask);
+        lightList.add(lightTask);
+
         //solve light task
-        System.out.println("id : "+lightTask.getID()+" type : "+lightTask.getType()+ " string : "+lightTask.getToEncrypt());
         System.out.println("Task n° "+lightTask.getID() +" Received");
+        System.out.println(lightList);
 
         return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public String hello() {
+    public ArrayList<LightTask> getLightList() {
+        return lightList;
+    }
 
-        return "HELLO WORLD!";
+    public void updateLightTask(LightTask task){
+        int index = lightList.indexOf(task);
+        lightList.set(index,task);
     }
 
 }

@@ -9,23 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(path = "medium")
 public class MediumTaskService {
 
+    private ArrayList<MediumTask> mediumList = new ArrayList<>();
+
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<String> solveMediumTask(@RequestBody MediumTask mediumTask) {
 
-        System.out.println("id : "+mediumTask.getID()+" type : "+mediumTask.getType());
+        mediumList.add(mediumTask);
         System.out.println("Task n° "+mediumTask.getID() +" Received");
-
+        System.out.println(mediumList);
         return new ResponseEntity<>("ACK", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public String hello() {
+    public ArrayList<MediumTask> getLightList() {
+        return mediumList;
+    }
 
-        return "HELLO WORLD!";
+    public void updateLightTask(MediumTask task){
+        int index = mediumList.indexOf(task);
+        mediumList.set(index,task);
     }
 
 }
