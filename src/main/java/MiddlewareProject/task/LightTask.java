@@ -1,8 +1,5 @@
 package MiddlewareProject.task;
 
-/**
- * Created by andreacifola on 18/09/2018.
- */
 public class LightTask extends Task {
 
     private String toEncrypt;

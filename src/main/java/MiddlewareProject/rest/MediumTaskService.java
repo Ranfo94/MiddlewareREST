@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @RestController
@@ -17,10 +18,14 @@ import java.util.ArrayList;
 public class MediumTaskService {
 
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<String> solveMediumTask(@RequestBody MediumTask mediumTask) {
+    public ResponseEntity<String> solveMediumTask(@RequestBody MediumTask mediumTask,HttpServletRequest request) {
 
-        TaskHandler.getInstance().addMediumTask(mediumTask);
-        return new ResponseEntity<>("ACK", HttpStatus.OK);
+        //System.out.println(request.getRemoteAddr());
+        TaskHandler taskHandler = TaskHandler.getInstance();
+        taskHandler.addMediumTask(mediumTask);
+        String res = taskHandler.sendMediumTask(mediumTask);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 
