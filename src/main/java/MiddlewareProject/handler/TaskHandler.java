@@ -77,7 +77,8 @@ public class TaskHandler {
     private void printList(){
         System.out.println("******************************************************");
         for (int i = 0; i < taskList.size(); i++) {
-            System.out.println("Middleware Task n° : "+ taskList.get(i).getMiddlewareID()+ " Device Task n° :"+taskList.get(i).getTask().getID()+" task type : "+taskList.get(i).getTask().getType());
+            System.out.println("Middleware Task n° : " + taskList.get(i).getMiddlewareID() + " Device Task n° :" +
+                    taskList.get(i).getTask().getID() + " task type : " + taskList.get(i).getTask().getType());
         }
         System.out.println("******************************************************");
     }
