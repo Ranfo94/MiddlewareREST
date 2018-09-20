@@ -1,23 +1,23 @@
 package MiddlewareProject.entities;
 
 
-public class Node {
+public class FogNode {
     private Integer id;
     private Integer ram;
     private Integer cpu;
-    private Integer totalBattery;
-    private Integer percentageBattery;
+    private Integer battery;
     private Integer storage;
+    private String type;
 
-    public Node() { }
+    public FogNode() { }
 
-    public Node(Integer id, Integer ram, Integer cpu, Integer totalBattery, Integer percentageBattery, Integer storage) {
+    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, String type) {
         this.id = id;
         this.ram = ram;
         this.cpu = cpu;
-        this.totalBattery = totalBattery;
-        this.percentageBattery = percentageBattery;
+        this.battery = battery;
         this.storage = storage;
+        this.type = type;
     }
 
     public Integer getId() {
@@ -44,20 +44,12 @@ public class Node {
         this.cpu = cpu;
     }
 
-    public Integer getTotalBattery() {
-        return totalBattery;
+    public Integer getBattery() {
+        return battery;
     }
 
-    public void setTotalBattery(Integer totalBattery) {
-        this.totalBattery = totalBattery;
-    }
-
-    public Integer getPercentageBattery() {
-        return percentageBattery;
-    }
-
-    public void setPercentageBattery(Integer percentageBattery) {
-        this.percentageBattery = percentageBattery;
+    public void setBattery(Integer battery) {
+        this.battery = battery;
     }
 
     public Integer getStorage() {
@@ -66,5 +58,13 @@ public class Node {
 
     public void setStorage(Integer storage) {
         this.storage = storage;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

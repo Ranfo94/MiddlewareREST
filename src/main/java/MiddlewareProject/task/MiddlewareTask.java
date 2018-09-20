@@ -4,13 +4,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MiddlewareTask {
 
-    private static final AtomicInteger count = new AtomicInteger(-1);
+    private static final AtomicInteger countMiddleware = new AtomicInteger(-1);
     private int middlewareID;
     private Task task;
 
     public MiddlewareTask(Task task) {
         this.task = task;
-        middlewareID = count.incrementAndGet();
+        middlewareID = countMiddleware.incrementAndGet();
     }
 
     public int getMiddlewareID() {
