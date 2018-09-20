@@ -2,7 +2,9 @@ package MiddlewareProject.handler;
 
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
+import com.sun.deploy.net.HttpResponse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TaskHandler {
@@ -27,40 +29,49 @@ public class TaskHandler {
         return taskList;
     }
 
-    public void addLightTask(LightTask task){
+    public MiddlewareTask addLightTask(LightTask task){
         MiddlewareTask middlewareTask = new MiddlewareTask(task);
         taskList.add(middlewareTask);
+        return middlewareTask;
         //printList();
     }
 
-    public void addMediumTask(MediumTask task){
+    public MiddlewareTask addMediumTask(MediumTask task){
         MiddlewareTask middlewareTask = new MiddlewareTask(task);
         taskList.add(middlewareTask);
+        return middlewareTask;
         //printList();
     }
 
-    public void addHeavyTask(HeavyTask task){
+    public MiddlewareTask addHeavyTask(HeavyTask task){
         MiddlewareTask middlewareTask = new MiddlewareTask(task);
         taskList.add(middlewareTask);
+        return middlewareTask;
         //printList();
     }
 
-    public String sendLightTask (LightTask lightTask){
-        String payload = jsonBuilder.LightTaskToJSON(lightTask);
+    public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
+        String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         String requestUrl="http://localhost:8090/light";
-        return requestHandler.sendPostRequest(requestUrl, payload);
+        LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
+        middlewareTask.setTask(lightTask);
+        return middlewareTask;
     }
 
-    public String sendMediumTask(MediumTask mediumTask){
-        String payload = jsonBuilder.MediumTaskToJSON(mediumTask);
+    public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
+        String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         String requestUrl="http://localhost:8090/medium";
-        return requestHandler.sendPostRequest(requestUrl, payload);
+        MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
+        middlewareTask.setTask(mediumTask);
+        return middlewareTask;
     }
 
-    public String sendHeavyTask(HeavyTask heavyTask){
-        String payload = jsonBuilder.HeavyTaskToJSON(heavyTask);
+    public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
+        String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         String requestUrl="http://localhost:8090/heavy";
-        return requestHandler.sendPostRequest(requestUrl, payload);
+        HeavyTask heavyTask =  requestHandler.sendHeavyPostRequest(requestUrl, payload);
+        middlewareTask.setTask(heavyTask);
+        return middlewareTask;
     }
 
     private void printList(){
