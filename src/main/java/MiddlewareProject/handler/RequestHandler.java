@@ -17,12 +17,12 @@ public class RequestHandler {
     ObjectMapper mapper = new ObjectMapper();
 
     public LightTask sendLightPostRequest(String requestUrl, String payload) throws IOException {
-        StringBuffer jsonString = new StringBuffer();
+        StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), LightTask.class);
     }
 
-    private void sendPost(String requestUrl, String payload, StringBuffer jsonString) {
+    public void sendPost(String requestUrl, String payload, StringBuilder jsonString) {
         try {
             URL url = new URL(requestUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -48,13 +48,13 @@ public class RequestHandler {
     }
 
     public MediumTask sendMediumPostRequest(String requestUrl, String payload) throws IOException {
-        StringBuffer jsonString = new StringBuffer();
+        StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), MediumTask.class);
     }
 
     public HeavyTask sendHeavyPostRequest(String requestUrl, String payload) throws IOException {
-        StringBuffer jsonString = new StringBuffer();
+        StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), HeavyTask.class);
     }

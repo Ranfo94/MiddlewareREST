@@ -2,13 +2,13 @@ package MiddlewareProject.handler;
 
 
 import MiddlewareProject.entities.FogNode;
+import MiddlewareProject.rest.RegistrationService;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RegistrationHandler {
 
-    private static final AtomicInteger countMiddleware = new AtomicInteger(-1);
     private static RegistrationHandler ourInstance = new RegistrationHandler();
     private ArrayList<FogNode> arrayListFogNode = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class RegistrationHandler {
     }
 
     public FogNode addNodeToNodeList(FogNode fogNode) {
-        fogNode.setId(countMiddleware.incrementAndGet());
+
         arrayListFogNode.add(fogNode);
         printFogNodeList();
         return fogNode;
