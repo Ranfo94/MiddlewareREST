@@ -17,6 +17,7 @@ public class RegistrationService {
     public ResponseEntity<FogNode> fogNodeRegistration(@RequestBody FogNode fogNode) {
 
         FogNode updatedFogNode = RegistrationHandler.getInstance().addNodeToNodeList(fogNode);
+
         return new ResponseEntity<>(updatedFogNode, HttpStatus.OK);
     }
 
