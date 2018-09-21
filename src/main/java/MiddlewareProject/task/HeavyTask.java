@@ -13,11 +13,5 @@ public class HeavyTask extends Task{
         this.response = response;
     }
 
-    public Long getN() {
-        return n;
-    }
-
-    public void setN(Long n) {
-        this.n = n;
-    }
+    public Long getN(){ return n; }
 }
