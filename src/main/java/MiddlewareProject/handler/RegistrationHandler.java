@@ -19,6 +19,10 @@ public class RegistrationHandler {
     private RegistrationHandler() {
     }
 
+    public ArrayList<FogNode> getArrayListFogNode() {
+        return arrayListFogNode;
+    }
+
     public FogNode addNodeToNodeList(FogNode fogNode) {
         fogNode.setId(countMiddleware.incrementAndGet());
         arrayListFogNode.add(fogNode);
@@ -29,9 +33,10 @@ public class RegistrationHandler {
     private void printFogNodeList() {
         System.out.println("--------------------------------------------------------------------------");
         for (FogNode anArrayListFogNode : arrayListFogNode) {
-            System.out.println("FogNode: id = " + anArrayListFogNode.getId() + "; type = " + anArrayListFogNode.getType() +
-                    "; CPU = " + anArrayListFogNode.getCpu() + "; RAM = " + anArrayListFogNode.getRam() + "; battery = " +
-                    anArrayListFogNode.getBattery() + "; storage = " + anArrayListFogNode.getStorage());
+            System.out.println("FogNode: id = " + anArrayListFogNode.getId() + "; type = " +
+                    anArrayListFogNode.getType() + "; CPU = " + anArrayListFogNode.getCpu() + "; RAM = " +
+                    anArrayListFogNode.getRam() + "; battery = " + anArrayListFogNode.getBattery() +
+                    "; storage = " + anArrayListFogNode.getStorage() + ", port = " + anArrayListFogNode.getPort());
         }
         System.out.println("--------------------------------------------------------------------------");
     }

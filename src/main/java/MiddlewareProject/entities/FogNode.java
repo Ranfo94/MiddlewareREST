@@ -8,16 +8,18 @@ public class FogNode {
     private Integer battery;
     private Integer storage;
     private String type;
+    private String port;
 
     public FogNode() { }
 
-    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, String type) {
+    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, String type, String port) {
         this.id = id;
         this.ram = ram;
         this.cpu = cpu;
         this.battery = battery;
         this.storage = storage;
         this.type = type;
+        this.port = port;
     }
 
     public Integer getId() {
@@ -66,5 +68,13 @@ public class FogNode {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
     }
 }
