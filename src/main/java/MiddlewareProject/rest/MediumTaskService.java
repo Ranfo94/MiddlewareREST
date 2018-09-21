@@ -7,10 +7,7 @@ import MiddlewareProject.task.Task;
 import MiddlewareProject.utils.ResponseWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,21 +20,32 @@ public class MediumTaskService {
 
     ResponseWriter responseWriter = new ResponseWriter();
 
-    @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<MediumTask> solveMediumTask(@RequestBody MediumTask mediumTask,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(path = "{id}", method = RequestMethod.GET)
+    public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        System.out.println("Sending task "+id);
+        MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
+        if (middlewareTask == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(middlewareTask);
+        return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "register", method = RequestMethod.POST)
+    public ResponseEntity<Integer> registerMediumTask(@RequestBody MediumTask mediumTask) throws IOException {
 
         //System.out.println(request.getRemoteAddr());
 
         //Invia ACK al client
         //responseWriter.sendResponse("Processing Task...",response);
-        System.out.println("Task Received - MIDDLEWARE");
+        System.out.println("Task da registrare : "+mediumTask.getID()+ " number: "+mediumTask.getNumber());
 
         TaskHandler taskHandler = TaskHandler.getInstance();
         MiddlewareTask middlewareTask = taskHandler.addMediumTask(mediumTask);
-        MiddlewareTask res = taskHandler.sendMediumTask(middlewareTask);
+        //MiddlewareTask res = taskHandler.sendLightTask(middlewareTask);
 
-        return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
+        return new ResponseEntity<>( middlewareTask.getMiddlewareID(), HttpStatus.OK);
     }
-
 
 }

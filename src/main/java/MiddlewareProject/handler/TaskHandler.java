@@ -2,7 +2,6 @@ package MiddlewareProject.handler;
 
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
-import com.sun.deploy.net.HttpResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,6 +71,15 @@ public class TaskHandler {
         HeavyTask heavyTask =  requestHandler.sendHeavyPostRequest(requestUrl, payload);
         middlewareTask.setTask(heavyTask);
         return middlewareTask;
+    }
+
+    public MiddlewareTask searchTaskByID(int id){
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getMiddlewareID() == id){
+                return taskList.get(i);
+            }
+        }
+        return null;
     }
 
     private void printList(){

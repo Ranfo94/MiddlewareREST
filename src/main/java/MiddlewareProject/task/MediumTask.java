@@ -6,7 +6,7 @@ package MiddlewareProject.task;
 public class MediumTask extends Task {
 
     private int number;
-    private int time;
+    private long time;
 
     public int getNumber() {
         return number;
@@ -16,11 +16,11 @@ public class MediumTask extends Task {
         this.number = number;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 }
