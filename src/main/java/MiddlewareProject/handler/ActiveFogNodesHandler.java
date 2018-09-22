@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
-
 public class ActiveFogNodesHandler {
 
     private  ArrayList<FogNode> aliveFogNodes = new ArrayList<>();
@@ -49,7 +48,7 @@ public class ActiveFogNodesHandler {
         }).start();
     }
 
-    public Integer getStatus(String url) throws IOException {
+    private Integer getStatus(String url) throws IOException {
 
         Integer code = 1000;
         try {

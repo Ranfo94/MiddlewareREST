@@ -1,11 +1,8 @@
 package MiddlewareProject.handler;
 
-
 import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.rest.RegistrationService;
-
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class RegistrationHandler {
 
