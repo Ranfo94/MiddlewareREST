@@ -16,8 +16,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequestMapping(path = "registration")
 public class RegistrationService {
 
+    // This variable create a unique id for the fog nodes
     private static final AtomicInteger countMiddleware = new AtomicInteger(-1);
 
+    /**This method accepts the request for registration from fog nodes and add the node to the active fog nodes list
+     * @param fogNode is the fog node that wants to registrate itself on the middleware
+     * @param request
+     * @return the entity of the response, in this case the fog node and the http status
+     */
     @RequestMapping(path = "", method = RequestMethod.POST)
     public ResponseEntity<FogNode> fogNodeRegistration(@RequestBody FogNode fogNode, HttpServletRequest request) {
 

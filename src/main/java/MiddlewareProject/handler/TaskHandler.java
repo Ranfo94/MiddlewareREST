@@ -1,5 +1,6 @@
 package MiddlewareProject.handler;
 
+import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
 
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
+
+    private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
+    private FogNode eligibleFogNode = new FogNode();
 
     private static TaskHandler ourInstance = new TaskHandler();
 
@@ -51,25 +55,40 @@ public class TaskHandler {
 
     public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
-        String requestUrl="http://localhost:8090/light";
-        LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
-        middlewareTask.setTask(lightTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        if (eligibleFogNode != null) {
+            String port = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + port + "/light";
+            LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
+            middlewareTask.setTask(lightTask);
+        }
+        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
     }
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
-        String requestUrl="http://localhost:8090/medium";
-        MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
-        middlewareTask.setTask(mediumTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        if (eligibleFogNode != null) {
+            String port = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + port + "/medium";
+            MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
+            middlewareTask.setTask(mediumTask);
+        }
+        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
     }
 
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
-        String requestUrl="http://localhost:8090/heavy";
-        HeavyTask heavyTask =  requestHandler.sendHeavyPostRequest(requestUrl, payload);
-        middlewareTask.setTask(heavyTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        if (eligibleFogNode != null) {
+            String port = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + port + "/heavy";
+            HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
+            middlewareTask.setTask(heavyTask);
+        }
+        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
     }
 

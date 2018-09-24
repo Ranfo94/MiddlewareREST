@@ -1,18 +1,20 @@
 package MiddlewareProject.entities;
 
 
+import MiddlewareProject.task.Type;
+
 public class FogNode {
     private Integer id;
     private Integer ram;
     private Integer cpu;
     private Integer battery;
     private Integer storage;
-    private String type;
+    private Type type;
     private String port;
 
     public FogNode() { }
 
-    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, String type, String port) {
+    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, Type type, String port) {
         this.id = id;
         this.ram = ram;
         this.cpu = cpu;
@@ -62,11 +64,11 @@ public class FogNode {
         this.storage = storage;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

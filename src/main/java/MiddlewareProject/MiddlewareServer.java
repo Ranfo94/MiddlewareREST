@@ -11,6 +11,6 @@ public class MiddlewareServer {
         SpringApplication.run(MiddlewareServer.class, args);
 
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
-        activeFogNodesHandler.checkAlivesFogNodes();
+        activeFogNodesHandler.checkAlivesFogNodes("no-print");
     }
 }
