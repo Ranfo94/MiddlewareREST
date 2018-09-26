@@ -3,9 +3,11 @@ package MiddlewareProject.handler;
 import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
+import MiddlewareProject.utils.RandomNumberGenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TaskHandler {
 
@@ -13,6 +15,7 @@ public class TaskHandler {
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private FogNode eligibleFogNode = new FogNode();
+    Integer consumption;
 
     private static TaskHandler ourInstance = new TaskHandler();
 
@@ -55,10 +58,13 @@ public class TaskHandler {
 
     public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        consumption = middlewareTask.getTask().getConsumption();
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+
         if (eligibleFogNode != null) {
-            String port = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + port + "/light";
+            //TODO riaggiungere quello tolto quando ritorna il task (tranne la batteria)
+            String fogNodePort = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + fogNodePort + "/light";
             LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
             middlewareTask.setTask(lightTask);
         }
@@ -68,10 +74,14 @@ public class TaskHandler {
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        consumption = middlewareTask.getTask().getConsumption();
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+
         if (eligibleFogNode != null) {
-            String port = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + port + "/medium";
+            FogNode newFog = new FogNode();
+            newFog = updateCurrentValuesFogNode();
+            String fogNodePort = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + fogNodePort + "/medium";
             MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
             middlewareTask.setTask(mediumTask);
         }
@@ -81,15 +91,34 @@ public class TaskHandler {
 
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("round-robin", middlewareTask);
+        consumption = middlewareTask.getTask().getConsumption();
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+
         if (eligibleFogNode != null) {
-            String port = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + port + "/heavy";
+            FogNode newFog = new FogNode();
+            newFog = updateCurrentValuesFogNode();
+            String fogNodePort = eligibleFogNode.getPort();
+            String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
             HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
             middlewareTask.setTask(heavyTask);
         }
         //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
+    }
+
+    private FogNode updateCurrentValuesFogNode() {
+        ArrayList<FogNode> currentFogNodes = RegistrationHandler.getInstance().getArrayListFogNode();
+        for (FogNode eligibleNode : currentFogNodes) {
+            if (Objects.equals(eligibleNode.getId(), eligibleFogNode.getId())) {
+                eligibleNode.setCurrentRam(eligibleFogNode.getCurrentRam() - consumption);
+                eligibleNode.setCurrentCpu(eligibleFogNode.getCurrentCpu() - consumption);
+                //TODO alla batteria togliere i msec quando
+                //eligibleNode.setCurrentBattery(eligibleFogNode.getCurrentBattery() - consumption);
+                eligibleNode.setCurrentStorage(eligibleFogNode.getCurrentStorage() - consumption);
+                return eligibleNode;
+            }
+        }
+        return eligibleFogNode;
     }
 
     public MiddlewareTask searchTaskByID(int id){
@@ -99,6 +128,10 @@ public class TaskHandler {
             }
         }
         return null;
+    }
+
+    public Integer getConsumption() {
+        return consumption;
     }
 
     private void printList(){

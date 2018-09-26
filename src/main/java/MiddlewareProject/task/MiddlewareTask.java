@@ -8,6 +8,9 @@ public class MiddlewareTask {
     private int middlewareID;
     private Task task;
 
+    public MiddlewareTask() {
+    }
+
     public MiddlewareTask(Task task) {
         this.task = task;
         middlewareID = countMiddleware.incrementAndGet();
