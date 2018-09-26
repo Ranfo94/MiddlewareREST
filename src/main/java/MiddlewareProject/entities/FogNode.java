@@ -15,23 +15,11 @@ public class FogNode {
     private Integer currentCpu;
     private Float currentBattery;
     private Integer currentStorage;
+    private Double latitude;
+    private Double longitude;
+    private Boolean isCurrentSupplied;
 
     public FogNode() { }
-
-    public FogNode(Integer id, Integer ram, Integer cpu, Integer battery, Integer storage, Type type, String port,
-                   Integer currentRam, Integer currentCpu, Float currentBattery, Integer currentStorage) {
-        this.id = id;
-        this.ram = ram;
-        this.cpu = cpu;
-        this.battery = battery;
-        this.storage = storage;
-        this.type = type;
-        this.port = port;
-        this.currentRam = currentRam;
-        this.currentCpu =currentCpu;
-        this.currentBattery = currentBattery;
-        this.currentStorage = currentStorage;
-    }
 
     public Integer getId() {
         return id;
@@ -119,5 +107,29 @@ public class FogNode {
 
     public void setCurrentStorage(Integer currentStorage) {
         this.currentStorage = currentStorage;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Boolean getCurrentSupplied() {
+        return isCurrentSupplied;
+    }
+
+    public void setCurrentSupplied(Boolean currentSupplied) {
+        isCurrentSupplied = currentSupplied;
     }
 }

@@ -40,8 +40,9 @@ public class RegistrationHandler {
         for (FogNode anArrayListFogNode : arrayListFogNode) {
             System.out.println("FogNode: id = " + anArrayListFogNode.getId() + "; type = " +
                     anArrayListFogNode.getType() + "; CPU = " + anArrayListFogNode.getCpu() + "; RAM = " +
-                    anArrayListFogNode.getRam() + "; battery = " + anArrayListFogNode.getBattery() +
-                    "; storage = " + anArrayListFogNode.getStorage() + ", port = " + anArrayListFogNode.getPort());
+                    anArrayListFogNode.getRam() + "; battery = " + anArrayListFogNode.getBattery() + "; storage = "
+                    + anArrayListFogNode.getStorage() + "; port = " + anArrayListFogNode.getPort() + "; latitude = " +
+                    anArrayListFogNode.getLatitude() + "; longitude = " + anArrayListFogNode.getLongitude());
         }
         System.out.println("--------------------------------------------------------------------------");
     }

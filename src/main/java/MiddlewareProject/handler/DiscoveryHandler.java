@@ -2,7 +2,9 @@ package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.task.Task;
 import MiddlewareProject.task.Type;
+import MiddlewareProject.utils.GeographicalCoordinatesDistance;
 import MiddlewareProject.utils.RandomNumberGenerator;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -18,12 +20,14 @@ public class DiscoveryHandler {
     private Integer rrMediumCounter = 0;
     private Integer rrHeavyCounter = 0;
 
-    private Integer lightThreshold = 100*100;
-    private Integer mediumThreshold = 20*100*100;
-    private Integer heavyThreshold = 40*100*100;
+    private Integer lightThreshold = 100;
+    private Integer mediumThreshold = 200;
+    private Integer heavyThreshold = 400;
+
+    private String noFogNode = "Non ci sono nodi fog disponibili al momento per eseguire questo task: " +
+            "verrà inserito in una lista in attesa di un nodo fog disponibile.";
 
     /**This method returns the fog node eligible to solve a specific task
-     *
      * @param policy is the chosen policy (random or the other)
      * @return the fog node eligible to solve a specific task
      */
@@ -59,7 +63,13 @@ public class DiscoveryHandler {
         } else if (Objects.equals(policy, "save-the-battery")) {
             eligibleFogNode = getEligibleSaveBatteryFogNode(eligibleHeavyFogNodes, eligibleMediumFogNodes,
                     eligibleLightFogNodes, currentTask);
-        }else {
+        } else if (Objects.equals(policy, "check-the-distance")) {
+            eligibleFogNode = getEligibleDistanceFogNode(eligibleHeavyFogNodes, eligibleMediumFogNodes,
+                    eligibleLightFogNodes, currentTask);
+        } else if (Objects.equals(policy, "complex")) {
+            eligibleFogNode = getEligibleComplexFogNode(eligibleHeavyFogNodes, eligibleMediumFogNodes,
+                    eligibleLightFogNodes, currentTask);
+        } else {
             System.out.println("La politica richiesta non è implementata nel middleware!");
         }
         return eligibleFogNode;
@@ -91,7 +101,7 @@ public class DiscoveryHandler {
             }
         }
         if (!thereIsRandomFogNode) {
-            System.out.println("Non ci sono nodi fog disponibili al momento per eseguire questo task");
+            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
@@ -123,7 +133,7 @@ public class DiscoveryHandler {
             rrHeavyCounter = rrObject.getRoundRobinCounter();
         }
         if (!thereIsRRFogNode) {
-            System.out.println("Non ci sono nodi fog disponibili al momento per eseguire questo task");
+            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
@@ -136,14 +146,14 @@ public class DiscoveryHandler {
 
         if (currentTask.getTask().getType().equals(Type.LIGHT)) {
 
-            eligibleFogNode = findSaveBatteryFogNode(eligibleLightFogNodes, maxPercentageBattery,lightThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(eligibleLightFogNodes, maxPercentageBattery, lightThreshold);
             if (eligibleFogNode != null)
                 thereIsSaveBatteryFogNode = true;
         }
         if ((currentTask.getTask().getType().equals(Type.LIGHT) ||
                 currentTask.getTask().getType().equals(Type.MEDIUM)) && !thereIsSaveBatteryFogNode) {
 
-            eligibleFogNode = findSaveBatteryFogNode(eligibleMediumFogNodes, maxPercentageBattery,mediumThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(eligibleMediumFogNodes, maxPercentageBattery, mediumThreshold);
             if (eligibleFogNode != null)
                 thereIsSaveBatteryFogNode = true;
         }
@@ -151,15 +161,120 @@ public class DiscoveryHandler {
                 currentTask.getTask().getType().equals(Type.MEDIUM) ||
                 currentTask.getTask().getType().equals(Type.HEAVY)) && !thereIsSaveBatteryFogNode) {
 
-            eligibleFogNode = findSaveBatteryFogNode(eligibleHeavyFogNodes, maxPercentageBattery,heavyThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(eligibleHeavyFogNodes, maxPercentageBattery, heavyThreshold);
             if (eligibleFogNode != null)
                 thereIsSaveBatteryFogNode = true;
         }
         if (!thereIsSaveBatteryFogNode) {
-            System.out.println("Non ci sono nodi fog disponibili al momento per eseguire questo task");
+            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
+    }
+
+    /**This method looks for the nearest fog nodes to the task; then, it chooses randomly among these nearest fog nodes
+     * @param eligibleHeavyFogNodes
+     * @param eligibleMediumFogNodes
+     * @param eligibleLightFogNodes
+     * @param currentTask
+     * @return
+     */
+    private FogNode getEligibleDistanceFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
+                                               ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
+        Boolean thereIsDistanceFogNode = false;
+        ArrayList<FogNode> nearestFogNodes;
+
+        if (currentTask.getTask().getType().equals(Type.LIGHT)) {
+            nearestFogNodes = findDistanceFogNode(eligibleLightFogNodes, currentTask, lightThreshold);
+            if (nearestFogNodes != null) {
+                eligibleFogNode = findRandomFogNode(nearestFogNodes, lightThreshold);
+                if (eligibleFogNode != null)
+                    thereIsDistanceFogNode = true;
+            } else
+                eligibleFogNode = null;
+        }
+        if ((currentTask.getTask().getType().equals(Type.LIGHT) ||
+                currentTask.getTask().getType().equals(Type.MEDIUM)) && !thereIsDistanceFogNode) {
+            nearestFogNodes = findDistanceFogNode(eligibleMediumFogNodes, currentTask, mediumThreshold);
+            if (nearestFogNodes != null) {
+                eligibleFogNode = findRandomFogNode(nearestFogNodes, mediumThreshold);
+                if (eligibleFogNode != null)
+                    thereIsDistanceFogNode = true;
+            } else
+                eligibleFogNode = null;
+        }
+        if ((currentTask.getTask().getType().equals(Type.LIGHT) ||
+                currentTask.getTask().getType().equals(Type.MEDIUM) ||
+                currentTask.getTask().getType().equals(Type.HEAVY)) && !thereIsDistanceFogNode) {
+            nearestFogNodes = findDistanceFogNode(eligibleHeavyFogNodes, currentTask, heavyThreshold);
+            if (nearestFogNodes != null) {
+                eligibleFogNode = findRandomFogNode(nearestFogNodes, heavyThreshold);
+                if (eligibleFogNode != null)
+                    thereIsDistanceFogNode = true;
+            } else
+                eligibleFogNode = null;
+        }
+        if (!thereIsDistanceFogNode) {
+            System.out.println(noFogNode);
+            eligibleFogNode = null;
+        }
+
+        return eligibleFogNode;
+    }
+
+    private FogNode getEligibleComplexFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
+                                              ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
+        Boolean thereIsComplexFogNode = false;
+        ArrayList<FogNode> nearestFogNodes;
+        Integer maxPercentageBattery = 0;
+
+        if (currentTask.getTask().getType().equals(Type.LIGHT)) {
+            nearestFogNodes = findDistanceFogNode(eligibleLightFogNodes, currentTask, lightThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(nearestFogNodes, maxPercentageBattery, lightThreshold);
+            if (eligibleFogNode != null)
+                thereIsComplexFogNode = true;
+        }
+        if ((currentTask.getTask().getType().equals(Type.LIGHT) ||
+                currentTask.getTask().getType().equals(Type.MEDIUM)) && !thereIsComplexFogNode) {
+            nearestFogNodes = findDistanceFogNode(eligibleMediumFogNodes, currentTask, mediumThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(nearestFogNodes, maxPercentageBattery, mediumThreshold);
+            if (eligibleFogNode != null)
+                thereIsComplexFogNode = true;
+        }
+        if ((currentTask.getTask().getType().equals(Type.LIGHT) ||
+                currentTask.getTask().getType().equals(Type.MEDIUM) ||
+                currentTask.getTask().getType().equals(Type.HEAVY)) && !thereIsComplexFogNode) {
+            nearestFogNodes = findDistanceFogNode(eligibleHeavyFogNodes, currentTask, heavyThreshold);
+            eligibleFogNode = findSaveBatteryFogNode(nearestFogNodes, maxPercentageBattery, heavyThreshold);
+            if (eligibleFogNode != null)
+                thereIsComplexFogNode = true;
+        }
+        if (!thereIsComplexFogNode) {
+            System.out.println(noFogNode);
+            eligibleFogNode = null;
+        }
+
+        return eligibleFogNode;
+
+    }
+
+    private ArrayList<FogNode> findDistanceFogNode(ArrayList<FogNode> eligibleFogNodes, MiddlewareTask currentTask,
+                                        Integer threshold) {
+        ArrayList<FogNode> nearestEligibleNodes = new ArrayList<>();
+        Integer consumption = TaskHandler.getInstance().getConsumption();
+        GeographicalCoordinatesDistance gcd = new GeographicalCoordinatesDistance();
+
+        for (FogNode eligible : eligibleFogNodes) {
+            Double maxDistance = 100.0;
+            if (gcd.distance(eligible.getLatitude(), currentTask.getTask().getLatitude(),
+                    eligible.getLongitude(), currentTask.getTask().getLongitude()) < maxDistance &&
+                    eligible.getCurrentBattery() > consumption+threshold) {
+                nearestEligibleNodes.add(eligible);
+            }
+        }
+        if (nearestEligibleNodes.size() == 0)
+            nearestEligibleNodes = null;
+        return  nearestEligibleNodes;
     }
 
     private FogNode findSaveBatteryFogNode(ArrayList<FogNode> eligibleFogNodes, Integer maxPercentageBattery,
@@ -170,7 +285,7 @@ public class DiscoveryHandler {
         // The first loop chooses only the nodes that can execute the task, based only on consumption
         for (FogNode eligible : eligibleFogNodes) {
             if (eligible.getCurrentRam() >= consumption && eligible.getCurrentCpu() >= consumption &&
-                    eligible.getCurrentBattery() >= consumption * threshold && eligible.getCurrentStorage() >= consumption)
+                    eligible.getCurrentBattery() >= (consumption+threshold) && eligible.getCurrentStorage() >= consumption)
                 moreEligibleNodes.add(eligible);
         }
 
@@ -195,7 +310,7 @@ public class DiscoveryHandler {
 
         for (FogNode eligible : eligibleFogNodes) {
             if (eligible.getCurrentRam() >= consumption && eligible.getCurrentCpu() >= consumption &&
-                    eligible.getCurrentBattery() >= consumption*threshold && eligible.getCurrentStorage() >= consumption) {
+                    eligible.getCurrentBattery() >= (consumption+threshold) && eligible.getCurrentStorage() >= consumption) {
                 thereIsRRFogNode = true;
                 eligibleNode = eligible;
                 break;
@@ -223,7 +338,7 @@ public class DiscoveryHandler {
         Integer consumption = TaskHandler.getInstance().getConsumption();
         for (FogNode eligible : eligibleFogNodes) {
             if (eligible.getCurrentRam() >= consumption && eligible.getCurrentCpu() >= consumption &&
-                    eligible.getCurrentBattery() >= consumption*threshold && eligible.getCurrentStorage() >= consumption) {
+                    eligible.getCurrentBattery() >= (consumption+threshold) && eligible.getCurrentStorage() >= consumption) {
                 eligibleFogNode = eligibleFogNodes.get(randomFogNode);
                 return eligibleFogNode;
             }

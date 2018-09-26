@@ -2,13 +2,11 @@ package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.MediumTask;
 import MiddlewareProject.task.MiddlewareTask;
 import MiddlewareProject.utils.ResponseWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,6 +22,7 @@ public class HeavyTaskService {
 
         System.out.println("Sending task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
+
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

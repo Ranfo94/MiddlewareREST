@@ -1,15 +1,15 @@
 package MiddlewareProject.rest;
 
 
+import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.task.Task;
 import MiddlewareProject.utils.ResponseWriter;
+import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,6 +25,7 @@ public class LightTaskService {
 
         System.out.println("Sending task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
+
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

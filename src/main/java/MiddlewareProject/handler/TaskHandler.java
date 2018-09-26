@@ -3,19 +3,20 @@ package MiddlewareProject.handler;
 import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
-import MiddlewareProject.utils.RandomNumberGenerator;
+import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
 
+    private String policy = "check-the-distance";
+
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private FogNode eligibleFogNode = new FogNode();
-    Integer consumption;
+    private Integer consumption;
 
     private static TaskHandler ourInstance = new TaskHandler();
 
@@ -59,66 +60,71 @@ public class TaskHandler {
     public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
-            //TODO riaggiungere quello tolto quando ritorna il task (tranne la batteria)
+            //Subtract the consumption from the fog node that is executing the task
+            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
+            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
             LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
+
+            //Add again the subtracted resources from the fog node that has executed the task
+            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
+            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+
             middlewareTask.setTask(lightTask);
         }
-        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
+        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node (tutti e 3)
         return middlewareTask;
     }
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
-            FogNode newFog = new FogNode();
-            newFog = updateCurrentValuesFogNode();
+            //Subtract the consumption from the fog node that is executing the task
+            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
+            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
             MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
+
+            //Add again the subtracted resources from the fog node that has executed the task
+            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
+            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+
             middlewareTask.setTask(mediumTask);
         }
-        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
     }
 
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        eligibleFogNode = discoveryHandler.discoverEligibleFogNode("random", middlewareTask);
+        eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
-            FogNode newFog = new FogNode();
-            newFog = updateCurrentValuesFogNode();
+            //Subtract the consumption from the fog node that is executing the task
+            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
+            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
             HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
+
+            //Add again the subtracted resources from the fog node that has executed the task
+            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
+            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+
             middlewareTask.setTask(heavyTask);
         }
-        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node
         return middlewareTask;
-    }
-
-    private FogNode updateCurrentValuesFogNode() {
-        ArrayList<FogNode> currentFogNodes = RegistrationHandler.getInstance().getArrayListFogNode();
-        for (FogNode eligibleNode : currentFogNodes) {
-            if (Objects.equals(eligibleNode.getId(), eligibleFogNode.getId())) {
-                eligibleNode.setCurrentRam(eligibleFogNode.getCurrentRam() - consumption);
-                eligibleNode.setCurrentCpu(eligibleFogNode.getCurrentCpu() - consumption);
-                //TODO alla batteria togliere i msec quando
-                //eligibleNode.setCurrentBattery(eligibleFogNode.getCurrentBattery() - consumption);
-                eligibleNode.setCurrentStorage(eligibleFogNode.getCurrentStorage() - consumption);
-                return eligibleNode;
-            }
-        }
-        return eligibleFogNode;
     }
 
     public MiddlewareTask searchTaskByID(int id){

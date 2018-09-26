@@ -1,8 +1,6 @@
 package MiddlewareProject.task;
 
-/**
- * Created by andreacifola on 18/09/2018.
- */
+
 public class MediumTask extends Task {
 
     private int number;
