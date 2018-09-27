@@ -2,7 +2,6 @@ package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.task.Task;
 import MiddlewareProject.task.Type;
 import MiddlewareProject.utils.GeographicalCoordinatesDistance;
 import MiddlewareProject.utils.RandomNumberGenerator;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class DiscoveryHandler {
+class DiscoveryHandler {
 
     private FogNode eligibleFogNode = new FogNode();
 
@@ -31,7 +30,7 @@ public class DiscoveryHandler {
      * @param policy is the chosen policy (random or the other)
      * @return the fog node eligible to solve a specific task
      */
-    public FogNode discoverEligibleFogNode(String policy, MiddlewareTask currentTask) {
+    FogNode discoverEligibleFogNode(String policy, MiddlewareTask currentTask) {
         ArrayList<FogNode> eligibleLightFogNodes = new ArrayList<>();
         ArrayList<FogNode> eligibleMediumFogNodes = new ArrayList<>();
         ArrayList<FogNode> eligibleHeavyFogNodes = new ArrayList<>();
@@ -285,8 +284,17 @@ public class DiscoveryHandler {
         // The first loop chooses only the nodes that can execute the task, based only on consumption
         for (FogNode eligible : eligibleFogNodes) {
             if (eligible.getCurrentRam() >= consumption && eligible.getCurrentCpu() >= consumption &&
-                    eligible.getCurrentBattery() >= (consumption+threshold) && eligible.getCurrentStorage() >= consumption)
-                moreEligibleNodes.add(eligible);
+                    eligible.getCurrentStorage() >= consumption)
+                //Check the current battery only if the fog node is not electricity supplied
+                //TODO controllare perché "eligible.getElectricitySupplied()" ritorna "null"
+                if (!eligible.getElectricitySupplied()) {
+                    if (eligible.getCurrentBattery() >= (consumption + threshold)) {
+                        moreEligibleNodes.add(eligible);
+                    }
+                } else {
+                    moreEligibleNodes.add(eligible);
+                }
+
         }
 
         // The second loop iterates only on the nodes that can execute the task and chooses

@@ -12,7 +12,7 @@ public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
 
-    private String policy = "check-the-distance";
+    private String policy = "save-the-battery";
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private FogNode eligibleFogNode = new FogNode();

@@ -21,7 +21,7 @@ public class RegistrationService {
 
     /**This method accepts the request for registration from fog nodes and add the node to the active fog nodes list
      * @param fogNode is the fog node that wants to registrate itself on the middleware
-     * @param request
+     * @param request is the HttpServletRequest useful in order to get the remote port of the fog node
      * @return the entity of the response, in this case the fog node and the http status
      */
     @RequestMapping(path = "", method = RequestMethod.POST)
@@ -31,13 +31,13 @@ public class RegistrationService {
         fogNode.setId(countMiddleware.incrementAndGet());
 
         RegistrationHandler.getInstance().addNodeToNodeList(fogNode);
+        RegistrationHandler.getInstance().printFogNodeList();
 
         return new ResponseEntity<>(fogNode, HttpStatus.OK);
     }
 
     @RequestMapping(path = "", method = RequestMethod.GET)
     public String hello() {
-
         return "HELLO WORLD registration!";
     }
 }

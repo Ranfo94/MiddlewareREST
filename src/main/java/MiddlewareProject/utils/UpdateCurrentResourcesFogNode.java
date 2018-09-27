@@ -15,8 +15,10 @@ public class UpdateCurrentResourcesFogNode {
             if (Objects.equals(eligibleNode.getId(), eligibleFogNode.getId())) {
                 eligibleNode.setCurrentRam(eligibleFogNode.getCurrentRam() - consumption);
                 eligibleNode.setCurrentCpu(eligibleFogNode.getCurrentCpu() - consumption);
-                eligibleNode.setCurrentBattery(eligibleFogNode.getCurrentBattery() - consumption);
                 eligibleNode.setCurrentStorage(eligibleFogNode.getCurrentStorage() - consumption);
+                //Decrease the currentBattery only if the fog node is not electricity supplied, otherwise it's no sense
+                if (!eligibleFogNode.getElectricitySupplied())
+                    eligibleNode.setCurrentBattery(eligibleFogNode.getCurrentBattery() - consumption);
                 return;
             }
         }
@@ -34,5 +36,4 @@ public class UpdateCurrentResourcesFogNode {
             }
         }
     }
-
 }

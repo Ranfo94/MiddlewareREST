@@ -24,25 +24,22 @@ public class RegistrationHandler {
         return arrayListFogNode;
     }
 
-    /**This method add the registrated fog nodes in to the list of the active fog nodes
-     *
+    /**This method add the registrated fog nodes into the list of the active fog nodes
      * @param fogNode is the node to be added in the list of the active fog nodes
-     * @return the list of the active fog nodes
      */
-    public FogNode addNodeToNodeList(FogNode fogNode) {
+    public void addNodeToNodeList(FogNode fogNode) {
         arrayListFogNode.add(fogNode);
-        printFogNodeList();
-        return fogNode;
     }
 
-    private void printFogNodeList() {
+    public void printFogNodeList() {
         System.out.println("--------------------------------------------------------------------------");
         for (FogNode anArrayListFogNode : arrayListFogNode) {
             System.out.println("FogNode: id = " + anArrayListFogNode.getId() + "; type = " +
                     anArrayListFogNode.getType() + "; CPU = " + anArrayListFogNode.getCpu() + "; RAM = " +
                     anArrayListFogNode.getRam() + "; battery = " + anArrayListFogNode.getBattery() + "; storage = "
                     + anArrayListFogNode.getStorage() + "; port = " + anArrayListFogNode.getPort() + "; latitude = " +
-                    anArrayListFogNode.getLatitude() + "; longitude = " + anArrayListFogNode.getLongitude());
+                    anArrayListFogNode.getLatitude() + "; longitude = " + anArrayListFogNode.getLongitude() +
+                    "; isElectricitySupplied = " + anArrayListFogNode.getElectricitySupplied());
         }
         System.out.println("--------------------------------------------------------------------------");
     }
