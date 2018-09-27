@@ -39,7 +39,7 @@ public class RegistrationHandler {
                     anArrayListFogNode.getRam() + "; battery = " + anArrayListFogNode.getBattery() + "; storage = "
                     + anArrayListFogNode.getStorage() + "; port = " + anArrayListFogNode.getPort() + "; latitude = " +
                     anArrayListFogNode.getLatitude() + "; longitude = " + anArrayListFogNode.getLongitude() +
-                    "; isElectricitySupplied = " + anArrayListFogNode.getElectricitySupplied());
+                    "; isPowerSupplied = " + anArrayListFogNode.getProva());
         }
         System.out.println("--------------------------------------------------------------------------");
     }

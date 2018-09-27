@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
+    //private ArrayList<MiddlewareTask> toBePerformedTasks = new ArrayList<>();
 
     private String policy = "save-the-battery";
 
@@ -57,15 +58,18 @@ public class TaskHandler {
         //printList();
     }
 
-    public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
+    public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        /*if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);*/
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            //TODO togliere i commenti a tutti e 3
+            //ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
@@ -73,23 +77,26 @@ public class TaskHandler {
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            //ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
 
             middlewareTask.setTask(lightTask);
+        } else {
+            //toBePerformedTasks.add(middlewareTask);
         }
-        //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node (tutti e 3)
         return middlewareTask;
     }
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        /*if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);*/
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            //ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
@@ -97,9 +104,11 @@ public class TaskHandler {
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            //ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
 
             middlewareTask.setTask(mediumTask);
+        }  else {
+            //toBePerformedTasks.add(middlewareTask);
         }
         return middlewareTask;
     }
@@ -107,12 +116,14 @@ public class TaskHandler {
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        /*if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);*/
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            //ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
@@ -120,9 +131,12 @@ public class TaskHandler {
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            //ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
 
             middlewareTask.setTask(heavyTask);
+        }   else {
+            //toBePerformedTasks.add(middlewareTask);
+            //System.out.println("\nTOBEPERFORMEDLIST SIZE = " + toBePerformedTasks.size());
         }
         return middlewareTask;
     }
@@ -139,6 +153,10 @@ public class TaskHandler {
     public Integer getConsumption() {
         return consumption;
     }
+
+    /*public ArrayList<MiddlewareTask> getToBePerformedTasks() {
+        return toBePerformedTasks;
+    }*/
 
     private void printList(){
         System.out.println("******************************************************");
