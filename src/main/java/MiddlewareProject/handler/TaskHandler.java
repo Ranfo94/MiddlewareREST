@@ -57,11 +57,13 @@ public class TaskHandler {
         //printList();
     }
 
+    /*
+    gestisce il task nel fogNode se viene trovato un nodo adatto, altrimenti trasmetto il task al Cloud
+     */
     public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
-
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
@@ -69,7 +71,7 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
-            LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
+            LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
@@ -77,10 +79,18 @@ public class TaskHandler {
 
             middlewareTask.setTask(lightTask);
         }
+        else{
+            String requestUrl = "http://localhost:8090/lightCloud";
+            LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
+            middlewareTask.setTask(lightTask);
+        }
         //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node (tutti e 3)
         return middlewareTask;
     }
 
+    /*
+    gestisce il task nel fogNode se viene trovato un nodo adatto, altrimenti trasmetto il task al Cloud
+     */
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
@@ -93,7 +103,7 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
-            MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
+            MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
@@ -101,9 +111,17 @@ public class TaskHandler {
 
             middlewareTask.setTask(mediumTask);
         }
+        else{
+            String requestUrl = "http://localhost:8090/mediumCloud";
+            MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
+            middlewareTask.setTask(mediumTask);
+        }
         return middlewareTask;
     }
 
+    /*
+    gestisce il task nel fogNode se viene trovato un nodo adatto, altrimenti trasmetto il task al Cloud
+     */
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
@@ -116,12 +134,17 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
-            HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
+            HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
             UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
             ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
 
+            middlewareTask.setTask(heavyTask);
+        }
+        else{
+            String requestUrl = "http://localhost:8090/heavyCloud";
+            HeavyTask heavyTask = requestHandler.sendCloudHeavyPostRequest(requestUrl, payload);
             middlewareTask.setTask(heavyTask);
         }
         return middlewareTask;

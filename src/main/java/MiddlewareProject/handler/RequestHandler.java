@@ -1,5 +1,6 @@
 package MiddlewareProject.handler;
 
+import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.task.HeavyTask;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.MediumTask;
@@ -16,10 +17,46 @@ public class RequestHandler {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    public LightTask sendLightPostRequest(String requestUrl, String payload) throws IOException {
+    ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
+
+    public LightTask sendLightPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+        StringBuilder jsonString = new StringBuilder();
+        sendPost(requestUrl, payload, jsonString);
+        activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
+        return mapper.readValue(jsonString.toString(), LightTask.class);
+    }
+
+    public MediumTask sendMediumPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+    //public MediumTask sendMediumPostRequest(String requestUrl, String payload. FogNode eligibleFogNode) throws IOException {
+        StringBuilder jsonString = new StringBuilder();
+        sendPost(requestUrl, payload, jsonString);
+        activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
+        return mapper.readValue(jsonString.toString(), MediumTask.class);
+    }
+
+    public HeavyTask sendHeavyPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+        StringBuilder jsonString = new StringBuilder();
+        sendPost(requestUrl, payload, jsonString);
+        activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
+        return mapper.readValue(jsonString.toString(), HeavyTask.class);
+    }
+
+    public LightTask sendCloudLightPostRequest(String requestUrl, String payload) throws IOException {
         StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), LightTask.class);
+    }
+
+    public MediumTask sendCloudMediumPostRequest(String requestUrl, String payload) throws IOException {
+        StringBuilder jsonString = new StringBuilder();
+        sendPost(requestUrl, payload, jsonString);
+        return mapper.readValue(jsonString.toString(), MediumTask.class);
+    }
+
+    public HeavyTask sendCloudHeavyPostRequest(String requestUrl, String payload) throws IOException {
+        StringBuilder jsonString = new StringBuilder();
+        sendPost(requestUrl, payload, jsonString);
+        return mapper.readValue(jsonString.toString(), HeavyTask.class);
     }
 
     public void sendPost(String requestUrl, String payload, StringBuilder jsonString) {
@@ -45,18 +82,6 @@ public class RequestHandler {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    public MediumTask sendMediumPostRequest(String requestUrl, String payload) throws IOException {
-        StringBuilder jsonString = new StringBuilder();
-        sendPost(requestUrl, payload, jsonString);
-        return mapper.readValue(jsonString.toString(), MediumTask.class);
-    }
-
-    public HeavyTask sendHeavyPostRequest(String requestUrl, String payload) throws IOException {
-        StringBuilder jsonString = new StringBuilder();
-        sendPost(requestUrl, payload, jsonString);
-        return mapper.readValue(jsonString.toString(), HeavyTask.class);
     }
 
     public String sendGetRequest(String requestUrl) throws IOException {

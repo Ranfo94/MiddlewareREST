@@ -1,15 +1,15 @@
 package MiddlewareProject.rest;
 
 
-import MiddlewareProject.entities.FogNode;
+import MiddlewareProject.handler.HangingFogNodesHandler;
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.MiddlewareTask;
 import MiddlewareProject.utils.ResponseWriter;
-import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "light")
 public class LightTaskService {
+    HangingFogNodesHandler hangingFogNodesHandler = new HangingFogNodesHandler();
 
     ResponseWriter responseWriter = new ResponseWriter();
 
@@ -30,6 +31,7 @@ public class LightTaskService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
+        //TODO togliere il nodo dalla taskList??
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }
 
