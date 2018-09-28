@@ -30,6 +30,7 @@ public class LightTaskService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
+        TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }
 

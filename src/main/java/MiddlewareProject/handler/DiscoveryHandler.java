@@ -287,7 +287,7 @@ class DiscoveryHandler {
                     eligible.getCurrentStorage() >= consumption)
                 //Check the current battery only if the fog node is not electricity supplied
                 //TODO controllare perché "eligible.getProva()" ritorna "null"
-                if (eligible.getProva().equals("no")) {
+                if (eligible.getPowered().equals("no")) {
                     if (eligible.getCurrentBattery() >= (consumption + threshold)) {
                         moreEligibleNodes.add(eligible);
                     }

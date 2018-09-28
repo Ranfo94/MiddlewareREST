@@ -9,27 +9,29 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ToBePerformedTaskHandler {
 
     private TaskHandler taskHandler = TaskHandler.getInstance();
+    private ArrayList<MiddlewareTask> tasks;
 
     public void executeToBePerformedTasks() {
-        /*while (true) {
-            try {
-                Thread.sleep(5000);
-                ArrayList<MiddlewareTask> tasks = taskHandler.getToBePerformedTasks();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                    tasks = taskHandler.getToBePerformedTasks();
+                    for (MiddlewareTask toBePerformedTask : tasks) {
+                        Type type = toBePerformedTask.getTask().getType();
+                        taskHandler.getToBePerformedTasks().remove(toBePerformedTask);
 
-                for (MiddlewareTask toBePerformedTask : tasks) {
-                    Type type = toBePerformedTask.getTask().getType();
-                    taskHandler.getToBePerformedTasks().remove(toBePerformedTask);
-
-                    if (type.equals(Type.LIGHT))
-                        taskHandler.sendLightTask(toBePerformedTask);
-                    else if (type.equals(Type.MEDIUM))
-                        taskHandler.sendMediumTask(toBePerformedTask);
-                    else if (type.equals(Type.HEAVY))
-                        taskHandler.sendHeavyTask(toBePerformedTask);
+                        if (type.equals(Type.LIGHT))
+                            taskHandler.sendLightTask(toBePerformedTask);
+                        else if (type.equals(Type.MEDIUM))
+                            taskHandler.sendMediumTask(toBePerformedTask);
+                        else if (type.equals(Type.HEAVY))
+                            taskHandler.sendHeavyTask(toBePerformedTask);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }*/
+        }).start();
     }
 }
