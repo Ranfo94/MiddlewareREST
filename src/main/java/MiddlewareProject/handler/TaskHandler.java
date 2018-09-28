@@ -13,6 +13,8 @@ public class TaskHandler {
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
     private ArrayList<MiddlewareTask> toBePerformedTasks = new ArrayList<>();
 
+    private ArrayList<FogNode> busyFogNodes = new ArrayList<>();
+
     private String policy = "save-the-battery";
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
@@ -70,6 +72,8 @@ public class TaskHandler {
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
             ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
 
+            busyFogNodes.add(eligibleFogNode);
+
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
             LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
@@ -98,6 +102,8 @@ public class TaskHandler {
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
             ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
 
+            busyFogNodes.add(eligibleFogNode);
+
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
             MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
@@ -124,6 +130,9 @@ public class TaskHandler {
             //Subtract the consumption from the fog node that is executing the task
             UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
             ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+
+            //TODO eliminare nodo fog dai busy quando ha finito la computazione
+            busyFogNodes.add(eligibleFogNode);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";

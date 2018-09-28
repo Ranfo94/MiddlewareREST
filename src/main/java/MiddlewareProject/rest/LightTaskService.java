@@ -1,12 +1,9 @@
 package MiddlewareProject.rest;
 
-
-import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.MiddlewareTask;
 import MiddlewareProject.utils.ResponseWriter;
-import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
