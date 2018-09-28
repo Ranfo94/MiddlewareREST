@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
+    private ArrayList<MiddlewareTask> toBePerformedTasks = new ArrayList<>();
 
     private String policy = "save-the-battery";
 
@@ -57,12 +58,15 @@ public class TaskHandler {
         //printList();
     }
 
+    public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
     /*
     gestisce il task nel fogNode se viene trovato un nodo adatto, altrimenti trasmetto il task al Cloud
      */
     public MiddlewareTask sendLightTask (MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
@@ -83,6 +87,9 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/lightCloud";
             LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
             middlewareTask.setTask(lightTask);
+        } else {
+            if (!toBePerformedTasks.contains(middlewareTask))
+                toBePerformedTasks.add(middlewareTask);
         }
         //TODO gestire il caso in cui il task non viene assegnato a nessun fog node per mancanza di fog node (tutti e 3)
         return middlewareTask;
@@ -94,6 +101,8 @@ public class TaskHandler {
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
@@ -115,6 +124,8 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/mediumCloud";
             MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
             middlewareTask.setTask(mediumTask);
+        }  else {
+            toBePerformedTasks.add(middlewareTask);
         }
         return middlewareTask;
     }
@@ -125,6 +136,8 @@ public class TaskHandler {
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+        if (toBePerformedTasks.contains(middlewareTask))
+            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
@@ -146,28 +159,35 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/heavyCloud";
             HeavyTask heavyTask = requestHandler.sendCloudHeavyPostRequest(requestUrl, payload);
             middlewareTask.setTask(heavyTask);
+        }   else {
+            toBePerformedTasks.add(middlewareTask);
+            System.out.println("\nTOBEPERFORMEDLIST SIZE = " + toBePerformedTasks.size() + "\n");
         }
         return middlewareTask;
     }
 
     public MiddlewareTask searchTaskByID(int id){
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getMiddlewareID() == id){
-                return taskList.get(i);
+        for (MiddlewareTask aTaskList : taskList) {
+            if (aTaskList.getMiddlewareID() == id) {
+                return aTaskList;
             }
         }
         return null;
     }
 
-    public Integer getConsumption() {
+    Integer getConsumption() {
         return consumption;
+    }
+
+    ArrayList<MiddlewareTask> getToBePerformedTasks() {
+        return toBePerformedTasks;
     }
 
     private void printList(){
         System.out.println("******************************************************");
-        for (int i = 0; i < taskList.size(); i++) {
-            System.out.println("Middleware Task n° : " + taskList.get(i).getMiddlewareID() + " Device Task n° :" +
-                    taskList.get(i).getTask().getID() + " task type : " + taskList.get(i).getTask().getType());
+        for (MiddlewareTask aTaskList : taskList) {
+            System.out.println("Middleware Task n° : " + aTaskList.getMiddlewareID() + " Device Task n° :" +
+                    aTaskList.getTask().getID() + " task type : " + aTaskList.getTask().getType());
         }
         System.out.println("******************************************************");
     }

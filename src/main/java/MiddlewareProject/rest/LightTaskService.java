@@ -9,7 +9,6 @@ import MiddlewareProject.utils.ResponseWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,6 +31,7 @@ public class LightTaskService {
         }
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
         //TODO togliere il nodo dalla taskList??
+        TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }
 

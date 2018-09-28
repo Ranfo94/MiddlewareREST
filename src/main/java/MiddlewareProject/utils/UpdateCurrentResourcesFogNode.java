@@ -17,7 +17,7 @@ public class UpdateCurrentResourcesFogNode {
                 eligibleNode.setCurrentCpu(eligibleFogNode.getCurrentCpu() - consumption);
                 eligibleNode.setCurrentStorage(eligibleFogNode.getCurrentStorage() - consumption);
                 //Decrease the currentBattery only if the fog node is not electricity supplied, otherwise it's no sense
-                if (!eligibleFogNode.getElectricitySupplied())
+                if (eligibleFogNode.getPowered().equals("no"))
                     eligibleNode.setCurrentBattery(eligibleFogNode.getCurrentBattery() - consumption);
                 return;
             }

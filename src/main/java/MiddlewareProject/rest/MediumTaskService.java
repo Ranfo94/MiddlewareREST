@@ -29,6 +29,7 @@ public class MediumTaskService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(middlewareTask);
+        TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
     }
 
