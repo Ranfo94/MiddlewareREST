@@ -14,6 +14,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "light")
 public class LightTaskService {
+    HangingFogNodesHandler hangingFogNodesHandler = new HangingFogNodesHandler();
 
     ResponseWriter responseWriter = new ResponseWriter();
 
@@ -27,6 +28,7 @@ public class LightTaskService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
+        //TODO togliere il nodo dalla taskList??
         TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }

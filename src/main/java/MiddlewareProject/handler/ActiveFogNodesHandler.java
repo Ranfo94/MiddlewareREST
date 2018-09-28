@@ -13,7 +13,7 @@ public class ActiveFogNodesHandler {
 
     private  ArrayList<FogNode> aliveFogNodes = new ArrayList<>();
 
-    /**This method check every 5 seconds if there are active fog nodes. It spawns a thread for every fog node to check
+    /**This method check every second if there are active fog nodes. It spawns a thread for every fog node to check
      * If the fog node is not alive, it removes the fog node from the list of the registrated fog nodes.
      */
     public void checkAlivesFogNodes(String print) {
@@ -22,6 +22,7 @@ public class ActiveFogNodesHandler {
             while (true) {
                 try {
                     Thread.sleep(1000);
+                    //ottengo una lista di nodi attivi
                     aliveFogNodes = RegistrationHandler.getInstance().getArrayListFogNode();
                     for (FogNode aliveFogNode : aliveFogNodes) {
                         new Thread(() -> {
@@ -76,5 +77,66 @@ public class ActiveFogNodesHandler {
             e.getMessage();
         }
         return code;
+    }
+
+    //TODO spostare in altro gestore
+    public void checkWorkerFogNode(FogNode eligibleFogNode){
+        int attempts, i;
+        int retry[] = new int[aliveFogNodes.size()];
+        //impongo un numero di tentativi in base al tipo di nodo
+        /*
+        if((eligibleFogNode.getType()).equals("LIGHT")){
+            attempts = 2;
+        }
+        if((eligibleFogNode.getType()).equals("MEDIUM")) {
+            attempts = 5;
+        }
+        if((eligibleFogNode.getType()).equals("HEAVY")) {
+            attempts = 10;
+        }
+        for(i=0; i<aliveFogNodes.size(); i++)
+            retry[i]=0;
+        */
+        //info del nodo da controllare
+        int id = eligibleFogNode.getId();
+
+        new Thread(() -> {
+        while(true) {
+            try {
+                Thread.sleep(1000);
+                //ottengo una lista di nodi attivi
+                aliveFogNodes = RegistrationHandler.getInstance().getArrayListFogNode();
+
+                for (FogNode aliveFogNode : aliveFogNodes) {
+                    new Thread(() -> {
+                        String requestUrl = "http://localhost:" + eligibleFogNode.getPort() + "/active";
+                        try {
+                            Integer aliveCode = getStatus(requestUrl);
+
+                            synchronized(retry){
+                                System.out.println("aliveCode" + aliveCode);
+                                if (aliveCode == 200) {
+                                    System.out.println("RITRASMETTERE");
+                                    retry[aliveFogNode.getId()]++;
+                               }
+                                /*
+                                if (retry[aliveFogNode.getId()] > 2 && aliveFogNode.getType().equals("LIGHT"))
+                                    System.out.println("spostare lightTask su nuovo nodo");
+                                if (retry[aliveFogNode.getId()] > 5 && aliveFogNode.getType().equals("MEDIUM"))
+                                    System.out.println("spostare mediumTask su nuovo nodo");
+                                if (retry[aliveFogNode.getId()] > 10 && aliveFogNode.getType().equals("HEAVY"))
+                                    System.out.println("spostare heavyTask su nuovo nodo");
+                                */
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        }).start();
     }
 }
