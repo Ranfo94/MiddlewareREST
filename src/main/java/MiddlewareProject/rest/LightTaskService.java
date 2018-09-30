@@ -11,17 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @RestController
 @RequestMapping(path = "light")
 public class LightTaskService {
-    HangingFogNodesHandler hangingFogNodesHandler = new HangingFogNodesHandler();
 
     ResponseWriter responseWriter = new ResponseWriter();
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<LightTask> solveLightTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        System.out.println("Sending task "+id);
+        System.out.println("Sending light task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
         if (middlewareTask == null){

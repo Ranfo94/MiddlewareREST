@@ -22,7 +22,7 @@ public class MediumTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        System.out.println("Sending task "+id);
+        System.out.println("Sending medium task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
         if (middlewareTask == null){
