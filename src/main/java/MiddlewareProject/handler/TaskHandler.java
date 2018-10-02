@@ -76,11 +76,11 @@ public class TaskHandler {
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    busyFogNodes.add(fogNode);
                     break;
                 }
             }
 
-            busyFogNodes.add(eligibleFogNode);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
@@ -119,11 +119,11 @@ public class TaskHandler {
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    busyFogNodes.add(fogNode);
                     break;
                 }
             }
 
-            busyFogNodes.add(eligibleFogNode);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
@@ -159,12 +159,12 @@ public class TaskHandler {
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    //TODO eliminare nodo fog dai busy quando ha finito la computazione
+                    busyFogNodes.add(fogNode);
                     break;
                 }
             }
 
-            //TODO eliminare nodo fog dai busy quando ha finito la computazione
-            busyFogNodes.add(eligibleFogNode);
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";

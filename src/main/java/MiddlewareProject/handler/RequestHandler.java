@@ -17,8 +17,6 @@ public class RequestHandler {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
-
     public LightTask sendLightPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
         StringBuilder jsonString = new StringBuilder();
         //activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
