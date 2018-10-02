@@ -15,6 +15,7 @@ public class RegistrationHandler {
     }
 
     private RegistrationHandler() {
+
     }
 
     /**This method gets the list of all the active fog nodes

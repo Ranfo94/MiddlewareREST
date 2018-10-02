@@ -1,11 +1,8 @@
 package MiddlewareProject.rest;
 
-import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.MediumTask;
 import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.utils.ResponseWriter;
-import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +13,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "medium")
 public class MediumTaskService {
-
-    ResponseWriter responseWriter = new ResponseWriter();
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {

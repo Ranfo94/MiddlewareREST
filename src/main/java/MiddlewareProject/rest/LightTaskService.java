@@ -3,7 +3,6 @@ package MiddlewareProject.rest;
 import MiddlewareProject.handler.TaskHandler;
 import MiddlewareProject.task.LightTask;
 import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.utils.ResponseWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "light")
 public class LightTaskService {
-
-    ResponseWriter responseWriter = new ResponseWriter();
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<LightTask> solveLightTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {

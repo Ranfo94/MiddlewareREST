@@ -1,11 +1,13 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
+import MiddlewareProject.entities.MediumTaskState;
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
 import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class TaskHandler {
@@ -14,10 +16,12 @@ public class TaskHandler {
     private ArrayList<MiddlewareTask> toBePerformedTasks = new ArrayList<>();
 
     private ArrayList<FogNode> busyFogNodes = new ArrayList<>();
+    private ArrayList<MediumTaskState> fogTaskStateList = new ArrayList<>();
 
     private String policy = "save-the-battery";
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
+    UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
     private FogNode eligibleFogNode = new FogNode();
     private Integer consumption;
 
@@ -69,8 +73,12 @@ public class TaskHandler {
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
-            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                    ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    break;
+                }
+            }
 
             busyFogNodes.add(eligibleFogNode);
 
@@ -79,8 +87,12 @@ public class TaskHandler {
             LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
-            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                   ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+                    break;
+                }
+            }
 
             middlewareTask.setTask(lightTask);
         } else {
@@ -104,8 +116,12 @@ public class TaskHandler {
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
-            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                    ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    break;
+                }
+            }
 
             busyFogNodes.add(eligibleFogNode);
 
@@ -114,8 +130,12 @@ public class TaskHandler {
             MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
-            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                    ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+                    break;
+                }
+            }
 
             middlewareTask.setTask(mediumTask);
         }  else {
@@ -136,8 +156,12 @@ public class TaskHandler {
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
-            UpdateCurrentResourcesFogNode ucvf = new UpdateCurrentResourcesFogNode();
-            ucvf.subtractConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                    ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    break;
+                }
+            }
 
             //TODO eliminare nodo fog dai busy quando ha finito la computazione
             busyFogNodes.add(eligibleFogNode);
@@ -147,8 +171,12 @@ public class TaskHandler {
             HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload, eligibleFogNode);
 
             //Add again the subtracted resources from the fog node that has executed the task
-            UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
-            ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+            for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
+                if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
+                    ucrfn.addConsumptionFromResources(eligibleFogNode, consumption);
+                    break;
+                }
+            }
 
             middlewareTask.setTask(heavyTask);
         }   else {
@@ -174,6 +202,22 @@ public class TaskHandler {
 
     Integer getConsumption() {
         return consumption;
+    }
+
+    ArrayList<FogNode> getBusyFogNodes() {
+        return busyFogNodes;
+    }
+
+    void removeBusyNode(FogNode fogNode) {
+        busyFogNodes.remove(fogNode);
+    }
+
+    public ArrayList<MediumTaskState> getFogTaskStateList() {
+        return fogTaskStateList;
+    }
+
+    void removeFogTask(MiddlewareTask middlewareTask) {
+        fogTaskStateList.remove(middlewareTask);
     }
 
     ArrayList<MiddlewareTask> getToBePerformedTasks() {
