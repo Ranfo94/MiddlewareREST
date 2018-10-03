@@ -1,6 +1,7 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
+import MiddlewareProject.entities.LightTaskState;
 import MiddlewareProject.entities.MediumTaskState;
 import MiddlewareProject.task.*;
 import MiddlewareProject.utils.JsonBuilder;
@@ -13,15 +14,15 @@ import java.util.Objects;
 public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
-    private ArrayList<MiddlewareTask> toBePerformedTasks = new ArrayList<>();
 
     private ArrayList<FogNode> busyFogNodes = new ArrayList<>();
-    private ArrayList<MediumTaskState> fogTaskStateList = new ArrayList<>();
+    private ArrayList<LightTaskState> lightTaskStateList = new ArrayList<>();
+    private ArrayList<MediumTaskState> mediumTaskStateList = new ArrayList<>();
 
     private String policy = "save-the-battery";
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
-    UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
+    private UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
     private FogNode eligibleFogNode = new FogNode();
     private Integer consumption;
 
@@ -67,8 +68,6 @@ public class TaskHandler {
     public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        if (toBePerformedTasks.contains(middlewareTask))
-            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
@@ -110,8 +109,6 @@ public class TaskHandler {
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        if (toBePerformedTasks.contains(middlewareTask))
-            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
@@ -150,8 +147,6 @@ public class TaskHandler {
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
-        if (toBePerformedTasks.contains(middlewareTask))
-            toBePerformedTasks.remove(middlewareTask);
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {
@@ -212,16 +207,16 @@ public class TaskHandler {
         busyFogNodes.remove(fogNode);
     }
 
-    public ArrayList<MediumTaskState> getFogTaskStateList() {
-        return fogTaskStateList;
+    public ArrayList<MediumTaskState> getMediumTaskStateList() {
+        return mediumTaskStateList;
+    }
+
+    public ArrayList<LightTaskState> getLightTaskStateList() {
+        return lightTaskStateList;
     }
 
     void removeFogTask(MiddlewareTask middlewareTask) {
-        fogTaskStateList.remove(middlewareTask);
-    }
-
-    ArrayList<MiddlewareTask> getToBePerformedTasks() {
-        return toBePerformedTasks;
+        mediumTaskStateList.remove(middlewareTask);
     }
 
     private void printList(){
