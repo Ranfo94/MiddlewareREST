@@ -1,8 +1,6 @@
 package MiddlewareProject.entities;
 
 
-import MiddlewareProject.task.Type;
-
 public class FogNode {
     private Integer id;
     private Integer ram;

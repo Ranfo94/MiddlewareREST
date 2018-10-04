@@ -1,9 +1,9 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MediumTask;
+import MiddlewareProject.entities.HeavyTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MediumTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;

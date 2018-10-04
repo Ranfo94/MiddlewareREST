@@ -1,9 +1,6 @@
 package MiddlewareProject.handler;
 
-import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.entities.LightTaskState;
-import MiddlewareProject.entities.MediumTaskState;
-import MiddlewareProject.task.*;
+import MiddlewareProject.entities.*;
 import MiddlewareProject.utils.JsonBuilder;
 import MiddlewareProject.utils.UpdateCurrentResourcesFogNode;
 import java.io.IOException;
@@ -107,8 +104,10 @@ public class TaskHandler {
     }
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
+
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
+
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
         if (eligibleFogNode != null) {

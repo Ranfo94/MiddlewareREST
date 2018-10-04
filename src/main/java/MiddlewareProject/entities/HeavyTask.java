@@ -1,6 +1,6 @@
-package MiddlewareProject.task;
+package MiddlewareProject.entities;
 
-public class HeavyTask extends Task{
+public class HeavyTask extends Task {
 
     private Long n = 45L;
     private Long response;

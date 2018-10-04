@@ -21,7 +21,7 @@ public class GetStateService {
     @RequestMapping(path = "light", method = RequestMethod.POST)
     public ResponseEntity<LightTaskState> lightTaskState(@RequestBody LightTaskState lightTaskState) throws IOException {
 
-        System.out.println("LoopCount: " + lightTaskState.getLoopCount() + ", Encrypted: " + lightTaskState.getEncrypted());
+        //System.out.println("LoopCount: " + lightTaskState.getLoopCount() + ", Encrypted: " + lightTaskState.getEncrypted());
 
         ArrayList<LightTaskState> lightTaskStateList = TaskHandler.getInstance().getLightTaskStateList();
         Boolean thereIsLightTaskState = false;

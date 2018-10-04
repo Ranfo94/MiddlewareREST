@@ -1,4 +1,4 @@
-package MiddlewareProject.task;
+package MiddlewareProject.entities;
 
 
 public class Task {

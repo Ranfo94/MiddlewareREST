@@ -1,8 +1,8 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.task.Type;
+import MiddlewareProject.entities.MiddlewareTask;
+import MiddlewareProject.entities.Type;
 import MiddlewareProject.utils.GeographicalCoordinatesDistance;
 import MiddlewareProject.utils.RandomNumberGenerator;
 import java.util.ArrayList;

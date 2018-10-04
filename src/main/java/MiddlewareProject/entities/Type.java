@@ -1,4 +1,4 @@
-package MiddlewareProject.task;
+package MiddlewareProject.entities;
 
 /**
  * Created by andreacifola on 18/09/2018.

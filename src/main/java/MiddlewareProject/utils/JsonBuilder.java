@@ -1,9 +1,9 @@
 package MiddlewareProject.utils;
 
 
-import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MediumTask;
+import MiddlewareProject.entities.HeavyTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MediumTask;
 
 public class JsonBuilder {
 

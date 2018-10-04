@@ -1,8 +1,8 @@
 package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
-import MiddlewareProject.task.MediumTask;
-import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.entities.MediumTask;
+import MiddlewareProject.entities.MiddlewareTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
