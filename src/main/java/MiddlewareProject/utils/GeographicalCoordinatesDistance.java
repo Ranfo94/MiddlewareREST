@@ -3,7 +3,17 @@ package MiddlewareProject.utils;
 
 public class GeographicalCoordinatesDistance {
 
-    public double distance(double lat1, double lat2, double lon1, double lon2) {
+    /**
+     * This method calculates the distance between two points which have both geografical coordinates. It takes
+     * latitude and longitude of both the points, then transforms this value in values calculated in meters; then
+     * it calculates the distance between two points.
+     * @param lat1 the latitude of the first point
+     * @param lat2 the latitude of the second point
+     * @param lon1 the longitude of the first point
+     * @param lon2 the longitude of the second point
+     * @return the distance calculated in km
+     */
+    public double distanceFromGeogCoordToMeters(double lat1, double lat2, double lon1, double lon2) {
 
         final int R = 6371; // Radius of the earth
 

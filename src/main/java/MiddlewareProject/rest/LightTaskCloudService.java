@@ -19,7 +19,7 @@ import java.io.IOException;
 public class LightTaskCloudService{
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<LightTask> solveLightCloudTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<LightTask> solveLightCloudTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending light task to Cloud "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);

@@ -20,7 +20,7 @@ import java.io.IOException;
 public class MediumTaskCloudService {
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<MediumTask> solveMediumCloudTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<MediumTask> solveMediumCloudTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending medium task to Cloud "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);

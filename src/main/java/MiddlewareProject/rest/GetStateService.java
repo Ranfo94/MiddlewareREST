@@ -18,6 +18,12 @@ import java.util.Objects;
 @RequestMapping(path="state")
 public class GetStateService {
 
+    /**
+     * This method gets the message of the fog node and updates the info about the light task, if any, otherwise
+     * it creates an element for the array of the light tasks in execution
+     * @param lightTaskState is the object with all the info about the state of the light task
+     * @return a light task state
+     */
     @RequestMapping(path = "light", method = RequestMethod.POST)
     public ResponseEntity<LightTaskState> lightTaskState(@RequestBody LightTaskState lightTaskState) throws IOException {
 
@@ -40,6 +46,12 @@ public class GetStateService {
         return new ResponseEntity<>(lightTaskState, HttpStatus.OK);
     }
 
+    /**
+     * This method gets the message of the fog node and updates the info about the medium task, if any, otherwise
+     * it creates an element for the array of the medium tasks in execution
+     * @param mediumTaskState is the object with all the info about the state of the medium task
+     * @return a medium task state
+     */
     @RequestMapping(path = "medium", method = RequestMethod.POST)
     public ResponseEntity<MediumTaskState> mediumTaskState(@RequestBody MediumTaskState mediumTaskState) throws IOException {
 

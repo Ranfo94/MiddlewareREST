@@ -1,7 +1,7 @@
 package MiddlewareProject;
 
 import MiddlewareProject.handler.ActiveFogNodesHandler;
-import MiddlewareProject.handler.WorkerFogNodesHandler;
+import MiddlewareProject.handler.BusyFogNodesHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,7 +14,7 @@ public class MiddlewareServer {
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
 
-        //WorkerFogNodesHandler workerFogNodesHandler = new WorkerFogNodesHandler();
-        //workerFogNodesHandler.checkWorkerFogNode();
+        BusyFogNodesHandler busyFogNodesHandler = new BusyFogNodesHandler();
+        //busyFogNodesHandler.checkWorkerFogNode();
     }
 }

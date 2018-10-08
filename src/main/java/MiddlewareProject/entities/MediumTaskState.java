@@ -4,9 +4,9 @@ public class MediumTaskState {
 
     private Integer taskId;
     private Integer state;
-    private Integer currentTime;
+    private Long currentTime;
 
-    public MediumTaskState(Integer taskId, Integer state, Integer currentTime) {
+    public MediumTaskState(Integer taskId, Integer state, Long currentTime) {
         this.taskId = taskId;
         this.state = state;
         this.currentTime = currentTime;
@@ -31,11 +31,11 @@ public class MediumTaskState {
         this.state = state;
     }
 
-    public Integer getCurrentTime() {
+    public Long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(Integer currentTime) {
+    public void setCurrentTime(Long currentTime) {
         this.currentTime = currentTime;
     }
 }
