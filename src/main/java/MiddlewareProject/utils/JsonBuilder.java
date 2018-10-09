@@ -24,9 +24,10 @@ public class JsonBuilder {
     }
 
     public String HeavyTaskToJSON(HeavyTask task){
-        String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() + "\", \"response\" : \"\"" +
-                ", \"consumption\" : " + task.getConsumption() + ", \"latitude\" : \"" +
-                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
+        String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() +"\" ,"+
+                " \"n\" : \""+ task.getN()+"\", \"partial\" : \""+task.getPartial()+"\", \"last\" : \""+task.getLast()+
+                "\", \"consumption\" : " + task.getConsumption() + ", \"response\" : \"\"" +
+                ", \"latitude\" : \"" + task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
         System.out.println(payload);
         return payload;
     }

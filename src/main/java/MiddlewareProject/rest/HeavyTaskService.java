@@ -23,6 +23,7 @@ public class HeavyTaskService {
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(middlewareTask);
         TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
