@@ -3,7 +3,8 @@ package MiddlewareProject.handler;
 import MiddlewareProject.entities.FogNode;
 import java.util.ArrayList;
 
-/**This is a singleton class that creates a single instance for the hanlder of the registration
+/**
+ * This is a singleton class that creates a single instance for the hanlder of the registration
  */
 public class RegistrationHandler {
 
