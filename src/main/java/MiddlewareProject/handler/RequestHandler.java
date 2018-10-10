@@ -19,22 +19,18 @@ public class RequestHandler {
 
     public LightTask sendLightPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
         StringBuilder jsonString = new StringBuilder();
-        //activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), LightTask.class);
     }
 
     public MediumTask sendMediumPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
-    //public MediumTask sendMediumPostRequest(String requestUrl, String payload. FogNode eligibleFogNode) throws IOException {
         StringBuilder jsonString = new StringBuilder();
-        //activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), MediumTask.class);
     }
 
     public HeavyTask sendHeavyPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
         StringBuilder jsonString = new StringBuilder();
-        //activeFogNodesHandler.checkWorkerFogNode(eligibleFogNode);
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), HeavyTask.class);
     }

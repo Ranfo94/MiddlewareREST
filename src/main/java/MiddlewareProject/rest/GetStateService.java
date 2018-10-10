@@ -1,5 +1,6 @@
 package MiddlewareProject.rest;
 
+import MiddlewareProject.entities.HeavyTaskState;
 import MiddlewareProject.entities.LightTaskState;
 import MiddlewareProject.entities.MediumTaskState;
 import MiddlewareProject.handler.TaskHandler;
@@ -60,5 +61,30 @@ public class GetStateService {
             mediumTaskStateList.add(mediumTaskState);
 
         return new ResponseEntity<>(mediumTaskState, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "heavy", method = RequestMethod.POST)
+    public ResponseEntity<HeavyTaskState> heavyTaskState(@RequestBody HeavyTaskState heavyTaskState) throws IOException {
+
+        //System.out.println("State: " + mediumTaskState.getState() + ", Time: " + mediumTaskState.getCurrentTime());
+
+        ArrayList<HeavyTaskState> heavyTaskStateList = TaskHandler.getInstance().getHeavyTaskStateList();
+        Boolean thereIsHeavyTaskState = false;
+
+        for (HeavyTaskState taskState: heavyTaskStateList) {
+            if (Objects.equals(taskState.getTaskId(), heavyTaskState.getTaskId())) {
+                thereIsHeavyTaskState = true;
+                taskState.setTaskId(heavyTaskState.getTaskId());
+                //TODO da adattare per l'heavyTask
+                /*
+                taskState.setCurrentTime(heavyTaskState.getCurrentTime());
+                taskState.setState(heavyTaskState.getState());
+                */
+            }
+        }
+        if (!thereIsHeavyTaskState)
+            heavyTaskStateList.add(heavyTaskState);
+
+        return new ResponseEntity<>(heavyTaskState, HttpStatus.OK);
     }
 }

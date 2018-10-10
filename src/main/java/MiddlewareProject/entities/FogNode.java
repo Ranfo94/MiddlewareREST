@@ -1,6 +1,5 @@
 package MiddlewareProject.entities;
 
-
 import MiddlewareProject.task.Type;
 
 public class FogNode {
@@ -17,6 +16,7 @@ public class FogNode {
     private Integer currentStorage;
     private Double latitude;
     private Double longitude;
+
     //"prova" checks if it is power supplied (dà errore se mettiamo un altro nomi all'infuori di prova)
 
     private String powered;

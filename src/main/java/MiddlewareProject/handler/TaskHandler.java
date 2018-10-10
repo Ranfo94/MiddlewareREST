@@ -1,6 +1,7 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
+import MiddlewareProject.entities.HeavyTaskState;
 import MiddlewareProject.entities.LightTaskState;
 import MiddlewareProject.entities.MediumTaskState;
 import MiddlewareProject.task.*;
@@ -18,13 +19,17 @@ public class TaskHandler {
     private ArrayList<FogNode> busyFogNodes = new ArrayList<>();
     private ArrayList<LightTaskState> lightTaskStateList = new ArrayList<>();
     private ArrayList<MediumTaskState> mediumTaskStateList = new ArrayList<>();
+    private ArrayList<HeavyTaskState> heavyTaskStateList = new ArrayList<>();
 
-    private String policy = "save-the-battery";
+    private ArrayList<ArrayList<Integer>> fogNodeWorkload = new ArrayList<ArrayList<Integer>>();
+
+    private String policy = "save-the-battery"; //TODO la politica va scelta dinamicamente
 
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
     private FogNode eligibleFogNode = new FogNode();
     private Integer consumption;
+    private WorkloadHandler workloadHandler = new WorkloadHandler();
 
     private static TaskHandler ourInstance = new TaskHandler();
 
@@ -66,10 +71,12 @@ public class TaskHandler {
     }
 
     public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
+        Integer id = middlewareTask.getTask().getID();
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
+        //tolgo risorse al nodo scelto e lo aggiungo alla lista dei nodi occupati
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
@@ -80,7 +87,9 @@ public class TaskHandler {
                 }
             }
 
+            workloadHandler.addTaskId(eligibleFogNode.getId(), middlewareTask.getTask().getID());
 
+            //prendo la porta del nodo scelto, credo la url e tx il task
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
             LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload, eligibleFogNode);
@@ -92,8 +101,8 @@ public class TaskHandler {
                     break;
                 }
             }
-
             middlewareTask.setTask(lightTask);
+
         } else {
             String requestUrl = "http://localhost:8090/lightCloud";
             LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
@@ -111,6 +120,7 @@ public class TaskHandler {
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
 
+        //TODO gestire invio dello stato
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
@@ -121,6 +131,8 @@ public class TaskHandler {
                 }
             }
 
+            //aggiungo l'id del task nella lista del nodo
+            workloadHandler.addTaskId(eligibleFogNode.getId(), middlewareTask.getTask().getID());
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
@@ -135,7 +147,7 @@ public class TaskHandler {
             }
 
             middlewareTask.setTask(mediumTask);
-        }  else {
+        } else {       //invio al Cloud
             String requestUrl = "http://localhost:8090/mediumCloud";
             MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
             middlewareTask.setTask(mediumTask);
@@ -160,6 +172,8 @@ public class TaskHandler {
                 }
             }
 
+            //aggiungo l'id del task alla lista del nodo
+            workloadHandler.addTaskId(eligibleFogNode.getId(), middlewareTask.getTask().getID());
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
@@ -207,16 +221,22 @@ public class TaskHandler {
         busyFogNodes.remove(fogNode);
     }
 
-    public ArrayList<MediumTaskState> getMediumTaskStateList() {
-        return mediumTaskStateList;
-    }
-
     public ArrayList<LightTaskState> getLightTaskStateList() {
         return lightTaskStateList;
     }
 
+    public ArrayList<MediumTaskState> getMediumTaskStateList() {
+        return mediumTaskStateList;
+    }
+
+    public ArrayList<HeavyTaskState> getHeavyTaskStateList() { return heavyTaskStateList; }
+
     void removeFogTask(MiddlewareTask middlewareTask) {
         mediumTaskStateList.remove(middlewareTask);
+    }
+
+    public ArrayList<ArrayList<Integer>> getFogNodeWorkload() {
+        return fogNodeWorkload;
     }
 
     private void printList(){

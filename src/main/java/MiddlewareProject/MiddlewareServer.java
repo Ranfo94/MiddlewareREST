@@ -14,7 +14,10 @@ public class MiddlewareServer {
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
 
-        //WorkerFogNodesHandler workerFogNodesHandler = new WorkerFogNodesHandler();
-        //workerFogNodesHandler.checkWorkerFogNode();
+        WorkerFogNodesHandler workerFogNodesHandler = new WorkerFogNodesHandler();
+        workerFogNodesHandler.checkWorkerFogNode();
+
+        //ToBePerformedTaskHandler toBePerformedTaskHandler = new ToBePerformedTaskHandler();
+        //toBePerformedTaskHandler.executeToBePerformedTasks();
     }
 }
