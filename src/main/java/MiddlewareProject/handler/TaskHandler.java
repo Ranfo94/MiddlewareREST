@@ -1,7 +1,6 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.entities.HeavyTaskState;
 import MiddlewareProject.entities.LightTaskState;
 import MiddlewareProject.entities.MediumTaskState;
 import MiddlewareProject.task.*;
@@ -79,6 +78,7 @@ public class TaskHandler {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
+        FogNode busyFogNodeToRemove = new FogNode();
 
         //tolgo risorse al nodo scelto e lo aggiungo alla lista dei nodi occupati
         if (eligibleFogNode != null) {
@@ -86,6 +86,8 @@ public class TaskHandler {
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    //todo controllare
+                    //busyFogNodeToRemove = fogNode;
                     busyFogNodes.add(fogNode);
                     break;
                 }
@@ -96,8 +98,11 @@ public class TaskHandler {
             //prendo la porta del nodo scelto, credo la url e tx il task
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light";
-            LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload, eligibleFogNode);
-
+            LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
+            //todo controllare
+            /*taskList.remove(middlewareTask);
+            busyFogNodes.remove(busyFogNodeToRemove);
+*/
             //Add again the subtracted resources from the fog node that has executed the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
@@ -111,18 +116,24 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/lightCloud";
             LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
             middlewareTask.setTask(lightTask);
-            /*
-            if (!toBePerformedTasks.contains(middlewareTask))
-                toBePerformedTasks.add(middlewareTask);
-                */
+            //todo controllare
+            //taskList.remove(middlewareTask);
         }
         return middlewareTask;
     }
+    //todo controllare
 
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
+/*
+        if (((MediumTask) middlewareTask.getTask()).getState() == null)
+            ((MediumTask) middlewareTask.getTask()).setState(0);
+        if (((MediumTask) middlewareTask.getTask()).getCurrentTime() == null)
+            ((MediumTask) middlewareTask.getTask()).setCurrentTime(0L);
+*/
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
+        FogNode busyFogNodeToRemove = new FogNode();
 
         //TODO gestire invio dello stato
         if (eligibleFogNode != null) {
@@ -130,6 +141,7 @@ public class TaskHandler {
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
+                    //busyFogNodeToRemove = fogNode;
                     busyFogNodes.add(fogNode);
                     break;
                 }
@@ -140,8 +152,12 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium";
-            MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload, eligibleFogNode);
-
+            MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
+            //todo controllare
+            /*
+            taskList.remove(middlewareTask);
+            busyFogNodes.remove(busyFogNodeToRemove);
+            */
             //Add again the subtracted resources from the fog node that has executed the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
@@ -155,6 +171,8 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/mediumCloud";
             MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
             middlewareTask.setTask(mediumTask);
+            //todo controllare
+            //taskList.remove(middlewareTask);
             //toBePerformedTasks.add(middlewareTask);
         }
         return middlewareTask;
@@ -164,13 +182,15 @@ public class TaskHandler {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);
+        FogNode busyFogNodeToRemove = new FogNode();
 
         if (eligibleFogNode != null) {
             //Subtract the consumption from the fog node that is executing the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
                     ucrfn.subtractConsumptionFromResources(fogNode, consumption);
-                    //TODO eliminare nodo fog dai busy quando ha finito la computazione
+                    //todo controllare
+                    //busyFogNodeToRemove = fogNode;
                     busyFogNodes.add(fogNode);
                     break;
                 }
@@ -181,8 +201,12 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy";
-            HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload, eligibleFogNode);
-
+            HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
+            //TODO controllare
+            /*
+            taskList.remove(middlewareTask);
+            busyFogNodes.remove(busyFogNodeToRemove);
+            */
             //Add again the subtracted resources from the fog node that has executed the task
             for (FogNode fogNode : RegistrationHandler.getInstance().getArrayListFogNode()) {
                 if (Objects.equals(eligibleFogNode.getId(), fogNode.getId())) {
@@ -196,10 +220,8 @@ public class TaskHandler {
             String requestUrl = "http://localhost:8090/heavyCloud";
             HeavyTask heavyTask = requestHandler.sendCloudHeavyPostRequest(requestUrl, payload);
             middlewareTask.setTask(heavyTask);
-            /*
-            toBePerformedTasks.add(middlewareTask);
-            System.out.println("\nTOBEPERFORMEDLIST SIZE = " + toBePerformedTasks.size() + "\n");
-            */
+            //TODO controllare
+            //taskList.remove(middlewareTask);
         }
         return middlewareTask;
     }
@@ -232,7 +254,6 @@ public class TaskHandler {
     public ArrayList<MediumTaskState> getMediumTaskStateList() {
         return mediumTaskStateList;
     }
-
     public ArrayList<HeavyTaskState> getHeavyTaskStateList() { return heavyTaskStateList; }
 
     void removeFogTask(MiddlewareTask middlewareTask) {

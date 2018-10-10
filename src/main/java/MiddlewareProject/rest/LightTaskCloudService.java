@@ -1,8 +1,8 @@
 package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MiddlewareTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class LightTaskCloudService{
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<LightTask> solveLightCloudTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<LightTask> solveLightCloudTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending light task to Cloud "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);

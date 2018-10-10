@@ -1,8 +1,8 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.task.Type;
+import MiddlewareProject.entities.MiddlewareTask;
+import MiddlewareProject.entities.Type;
 import MiddlewareProject.utils.GeographicalCoordinatesDistance;
 import MiddlewareProject.utils.RandomNumberGenerator;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ class DiscoveryHandler {
         } else if (Objects.equals(policy, "check-the-distance")) {
             eligibleFogNode = getEligibleDistanceFogNode(eligibleHeavyFogNodes, eligibleMediumFogNodes,
                     eligibleLightFogNodes, currentTask);
-        } else if (Objects.equals(policy, "complex")) {
+        } else if (Objects.equals(policy, "distance-and-battery")) {
             eligibleFogNode = getEligibleComplexFogNode(eligibleHeavyFogNodes, eligibleMediumFogNodes,
                     eligibleLightFogNodes, currentTask);
         } else {
@@ -74,6 +74,15 @@ class DiscoveryHandler {
         return eligibleFogNode;
     }
 
+    /**
+     * This method chooses an eligible fog node for the random policy
+     * @param eligibleHeavyFogNodes is the list of eligible heavy fog nodes
+     * @param eligibleMediumFogNodes is the list of eligible medium fog nodes
+     * @param eligibleLightFogNodes is the list of eligible light fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @param thereIsRandomFogNode
+     * @return the eligible fog node
+     */
     private FogNode getEligibleRandomFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
                                              ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask,
                                              Boolean thereIsRandomFogNode) {
@@ -106,6 +115,14 @@ class DiscoveryHandler {
         return eligibleFogNode;
     }
 
+    /**
+     * This method chooses an eligible fog node for the round-robin policy
+     * @param eligibleHeavyFogNodes is the list of eligible heavy fog nodes
+     * @param eligibleMediumFogNodes is the list of eligible medium fog nodes
+     * @param eligibleLightFogNodes is the list of eligible light fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @return the eligible fog node
+     */
     private FogNode getEligibleRRFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
                                              ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
         RRObject rrObject;
@@ -138,6 +155,14 @@ class DiscoveryHandler {
         return eligibleFogNode;
     }
 
+    /**
+     * This method chooses an eligible fog node for the "save the battery" policy
+     * @param eligibleHeavyFogNodes is the list of eligible heavy fog nodes
+     * @param eligibleMediumFogNodes is the list of eligible medium fog nodes
+     * @param eligibleLightFogNodes is the list of eligible light fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @return the eligible fog node
+     */
     private FogNode getEligibleSaveBatteryFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
                                                   ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
         Boolean thereIsSaveBatteryFogNode = false;
@@ -171,12 +196,13 @@ class DiscoveryHandler {
         return eligibleFogNode;
     }
 
-    /**This method looks for the nearest fog nodes to the task; then, it chooses randomly among these nearest fog nodes
-     * @param eligibleHeavyFogNodes
-     * @param eligibleMediumFogNodes
-     * @param eligibleLightFogNodes
-     * @param currentTask
-     * @return
+    /**
+     * This method looks for the nearest fog nodes to the task; then, it chooses randomly among these nearest fog nodes
+     * @param eligibleHeavyFogNodes is the list of eligible heavy fog nodes
+     * @param eligibleMediumFogNodes is the list of eligible medium fog nodes
+     * @param eligibleLightFogNodes is the list of eligible light fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @return the eligible fog node
      */
     private FogNode getEligibleDistanceFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
                                                ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
@@ -221,6 +247,16 @@ class DiscoveryHandler {
         return eligibleFogNode;
     }
 
+    /**
+     * This method looks for the nearest fog nodes to the task with the "check the distance" policy;
+     * then, it chooses among these fog nodes with the "save the battery" policy.
+     * So this method is a mix between the "check the distance" and the "save the battery" policies
+     * @param eligibleHeavyFogNodes is the list of eligible heavy fog nodes
+     * @param eligibleMediumFogNodes is the list of eligible medium fog nodes
+     * @param eligibleLightFogNodes is the list of eligible light fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @return the eligible fog node
+     */
     private FogNode getEligibleComplexFogNode(ArrayList<FogNode> eligibleHeavyFogNodes, ArrayList<FogNode> eligibleMediumFogNodes,
                                               ArrayList<FogNode> eligibleLightFogNodes, MiddlewareTask currentTask) {
         Boolean thereIsComplexFogNode = false;
@@ -257,6 +293,13 @@ class DiscoveryHandler {
 
     }
 
+    /**
+     * This method looks for a list of eligible fog nodes among the nodes chosen with the "check the distance" policy
+     * @param eligibleFogNodes is the list of eligible fog nodes
+     * @param currentTask is the task that asks for a fog node
+     * @param threshold is the maximum value accettable for the distance
+     * @return the list of eligible fog nodes according to the "check the distance" policy
+     */
     private ArrayList<FogNode> findDistanceFogNode(ArrayList<FogNode> eligibleFogNodes, MiddlewareTask currentTask,
                                         Integer threshold) {
         ArrayList<FogNode> nearestEligibleNodes = new ArrayList<>();
@@ -265,7 +308,7 @@ class DiscoveryHandler {
 
         for (FogNode eligible : eligibleFogNodes) {
             Double maxDistance = 100.0;
-            if (gcd.distance(eligible.getLatitude(), currentTask.getTask().getLatitude(),
+            if (gcd.distanceFromGeogCoordToMeters(eligible.getLatitude(), currentTask.getTask().getLatitude(),
                     eligible.getLongitude(), currentTask.getTask().getLongitude()) < maxDistance &&
                     eligible.getCurrentBattery() > consumption+threshold) {
                 nearestEligibleNodes.add(eligible);
@@ -276,6 +319,13 @@ class DiscoveryHandler {
         return  nearestEligibleNodes;
     }
 
+    /**
+     * This method looks for a eligible fog node among the nodes chosen with the "save the battery" policy
+     * @param eligibleFogNodes is the list of eligible fog nodes
+     * @param maxPercentageBattery will take the max value of all the batteries
+     * @param threshold is the maximum value accettable for the distance
+     * @return the list of eligible fog nodes according to the "check the distance" policy
+     */
     private FogNode findSaveBatteryFogNode(ArrayList<FogNode> eligibleFogNodes, Integer maxPercentageBattery,
                                            Integer threshold) {
         ArrayList<FogNode> moreEligibleNodes = new ArrayList<>();
@@ -284,9 +334,8 @@ class DiscoveryHandler {
         // The first loop chooses only the nodes that can execute the task, based only on consumption
         for (FogNode eligible : eligibleFogNodes) {
             if (eligible.getCurrentRam() >= consumption && eligible.getCurrentCpu() >= consumption &&
-                    eligible.getCurrentStorage() >= consumption)
+                    eligible.getCurrentStorage() >= consumption) {
                 //Check the current battery only if the fog node is not electricity supplied
-                //TODO controllare perché "eligible.getProva()" ritorna "null"
                 if (eligible.getPowered().equals("no")) {
                     if (eligible.getCurrentBattery() >= (consumption + threshold)) {
                         moreEligibleNodes.add(eligible);
@@ -294,9 +343,8 @@ class DiscoveryHandler {
                 } else {
                     moreEligibleNodes.add(eligible);
                 }
-
+            }
         }
-
         // The second loop iterates only on the nodes that can execute the task and chooses
         // the one with the max percentage battery
         for (FogNode moreEligible : moreEligibleNodes)

@@ -1,8 +1,8 @@
 package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MiddlewareTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class LightTaskService {
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<LightTask> solveLightTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<LightTask> solveLightTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending light task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
@@ -25,8 +25,6 @@ public class LightTaskService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
-        //TODO togliere il nodo dalla taskList??
-        TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }
 

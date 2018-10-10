@@ -1,8 +1,8 @@
 package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
-import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.entities.HeavyTask;
+import MiddlewareProject.entities.MiddlewareTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class HeavyTaskService {
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<HeavyTask> solveHeavyTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<HeavyTask> solveHeavyTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending heavy task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
@@ -23,6 +23,7 @@ public class HeavyTaskService {
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(middlewareTask);
         TaskHandler.getInstance().getTaskList().remove(middlewareTask);
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);

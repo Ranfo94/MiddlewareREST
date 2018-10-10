@@ -1,8 +1,8 @@
 package MiddlewareProject.rest;
 
 import MiddlewareProject.handler.TaskHandler;
-import MiddlewareProject.task.MediumTask;
-import MiddlewareProject.task.MiddlewareTask;
+import MiddlewareProject.entities.MediumTask;
+import MiddlewareProject.entities.MiddlewareTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class MediumTaskCloudService {
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<MediumTask> solveMediumCloudTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<MediumTask> solveMediumCloudTask(@PathVariable int id) throws IOException {
 
         System.out.println("Sending medium task to Cloud "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);

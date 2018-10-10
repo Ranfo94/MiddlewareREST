@@ -15,7 +15,7 @@ import java.net.URL;
 
 public class RequestHandler {
 
-    ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public LightTask sendLightPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
         StringBuilder jsonString = new StringBuilder();
@@ -53,7 +53,13 @@ public class RequestHandler {
         return mapper.readValue(jsonString.toString(), HeavyTask.class);
     }
 
-    public void sendPost(String requestUrl, String payload, StringBuilder jsonString) {
+    /**
+     * This is a standard method to send the POST to the server
+     * @param requestUrl is the url to reach the server
+     * @param payload is te JSON object
+     * @param jsonString
+     */
+    private void sendPost(String requestUrl, String payload, StringBuilder jsonString) {
         try {
             URL url = new URL(requestUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

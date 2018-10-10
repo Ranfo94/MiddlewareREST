@@ -1,7 +1,7 @@
 package MiddlewareProject;
 
 import MiddlewareProject.handler.ActiveFogNodesHandler;
-import MiddlewareProject.handler.WorkerFogNodesHandler;
+import MiddlewareProject.handler.BusyFogNodesHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -19,5 +19,8 @@ public class MiddlewareServer {
 
         //ToBePerformedTaskHandler toBePerformedTaskHandler = new ToBePerformedTaskHandler();
         //toBePerformedTaskHandler.executeToBePerformedTasks();
+        //TODO controllare busyFogNodeHandler
+        //BusyFogNodesHandler busyFogNodesHandler = new BusyFogNodesHandler();
+        //busyFogNodesHandler.checkWorkerFogNode();
     }
 }
