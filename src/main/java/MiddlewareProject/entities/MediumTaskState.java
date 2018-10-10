@@ -4,15 +4,14 @@ public class MediumTaskState {
 
     private Integer taskId;
     private Integer state;
-    private Integer currentTime;
+    private long currentTime;
+
+    public MediumTaskState() {}
 
     public MediumTaskState(Integer taskId, Integer state, Integer currentTime) {
         this.taskId = taskId;
         this.state = state;
         this.currentTime = currentTime;
-    }
-
-    public MediumTaskState() {
     }
 
     public Integer getTaskId() {
@@ -31,11 +30,11 @@ public class MediumTaskState {
         this.state = state;
     }
 
-    public Integer getCurrentTime() {
+    public long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(Integer currentTime) {
+    public void setCurrentTime(long currentTime) {
         this.currentTime = currentTime;
     }
 }

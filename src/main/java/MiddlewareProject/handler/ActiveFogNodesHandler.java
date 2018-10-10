@@ -13,9 +13,6 @@ import java.util.Objects;
 
 public class ActiveFogNodesHandler {
     private  ArrayList<FogNode> aliveFogNodes = new ArrayList<>();
-    private ArrayList<Integer> taskIdList = new ArrayList<Integer>();
-    private ArrayList<FogNode> busyFogNodes = new ArrayList<>();
-    private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
 
     /**This method check every second if there are active fog nodes. It spawns a thread for every fog node to check
      * If the fog node is not alive, it removes the fog node from the list of the registrated fog nodes.
@@ -34,30 +31,8 @@ public class ActiveFogNodesHandler {
                             try {
                                 Integer aliveCode = getStatus(requestUrl);
                                 if (aliveCode != 200) {
-                                    /*
-                                    Recupero la taskIdList del nodo, la "taskList" generale e cerco al suo
-                                    interno i task affidati al nodo in oggetto. Ne controllo il tipo e li mando
-                                    nuovamente in esecuzione.
-                                    Una volta finito posso rimuovere il nodo crashato dalle liste
-                                     */
-                                    WorkloadHandler workloadHandler = new WorkloadHandler();
-                                    taskIdList = workloadHandler.getTaskIdList(aliveFogNode.getId());
-                                    taskList = TaskHandler.getInstance().getTaskList();
-                                    MiddlewareTask middlewareTask = new MiddlewareTask();
-                                    for(Integer taskId : taskIdList){
-                                        middlewareTask = taskList.get(taskId);
-                                        if(middlewareTask.getTask().getType().equals("LIGHT"))
-                                            TaskHandler.getInstance().sendLightTask(middlewareTask);
-                                        if(middlewareTask.getTask().getType().equals("MEDIUM"))
-                                            TaskHandler.getInstance().sendMediumTask(middlewareTask);
-                                        if(middlewareTask.getTask().getType().equals("HEAVY"))
-                                            TaskHandler.getInstance().sendHeavyTask(middlewareTask);
-                                    }
-
                                     RegistrationHandler.getInstance().getArrayListFogNode().remove(aliveFogNode.getId());
                                     aliveFogNodes.remove(aliveFogNode.getId());
-                                    busyFogNodes = TaskHandler.getInstance().getBusyFogNodes();
-                                    busyFogNodes.remove(aliveFogNode.getId());
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();

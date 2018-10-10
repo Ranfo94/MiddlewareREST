@@ -30,6 +30,7 @@ public class TaskHandler {
     private FogNode eligibleFogNode = new FogNode();
     private Integer consumption;
     private WorkloadHandler workloadHandler = new WorkloadHandler();
+    private StateHandler stateHandler = new StateHandler();
 
     private static TaskHandler ourInstance = new TaskHandler();
 
@@ -72,6 +73,9 @@ public class TaskHandler {
 
     public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
         Integer id = middlewareTask.getTask().getID();
+
+        stateHandler.setTaskState(id, middlewareTask);  //recupero lo stato del task dalla lista degli stati
+
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
         eligibleFogNode = discoveryHandler.discoverEligibleFogNode(policy, middlewareTask);

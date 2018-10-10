@@ -10,7 +10,8 @@ public class JsonBuilder {
     public String LightTaskToJSON(LightTask task){
         String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() + "\", \"toEncrypt\": \"" +
                 task.getToEncrypt() + "\", \"consumption\" : " + task.getConsumption() + ", \"latitude\" : \"" +
-                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
+                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\", \"loopCount\" : " +
+                task.getLoopCount() + "}";
         System.out.println(payload);
         return payload;
     }
@@ -18,7 +19,8 @@ public class JsonBuilder {
     public String MediumTaskToJSON(MediumTask task){
         String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() + "\", \"number\": \"" +
                 task.getNumber() + "\", \"consumption\" : " + task.getConsumption() + ", \"latitude\" : \"" +
-                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
+                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\", \"state\" : " +
+                task.getState() + "}";
         System.out.println(payload);
         return payload;
     }
