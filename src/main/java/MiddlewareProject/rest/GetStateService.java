@@ -1,101 +1,80 @@
 package MiddlewareProject.rest;
 
-import MiddlewareProject.entities.HeavyTaskState;
-import MiddlewareProject.entities.LightTaskState;
-import MiddlewareProject.entities.MediumTaskState;
+import MiddlewareProject.entities.*;
 import MiddlewareProject.handler.TaskHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path="state")
 public class GetStateService {
 
     /**
-     * This method gets the message of the fog node and updates the info about the light task, if any, otherwise
-     * it creates an element for the array of the light tasks in execution
+     * Questo metodo aggiorna un light task con lo stato ricevuto dal fogNode.
      * @param lightTaskState is the object with all the info about the state of the light task
      * @return a light task state
      */
-    @RequestMapping(path = "light", method = RequestMethod.POST)
-    public ResponseEntity<LightTaskState> lightTaskState(@RequestBody LightTaskState lightTaskState) throws IOException {
+    @RequestMapping(path = "light/{midd_id}", method = RequestMethod.POST)
+    public ResponseEntity<LightTaskState> lightTaskState(@PathVariable int midd_id, @RequestBody LightTaskState lightTaskState) throws IOException {
 
-        //System.out.println("LoopCount: " + lightTaskState.getLoopCount() + ", Encrypted: " + lightTaskState.getEncrypted());
+        ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
 
-        ArrayList<LightTaskState> lightTaskStateList = TaskHandler.getInstance().getLightTaskStateList();
-        Boolean thereIsLightTaskState = false;
-
-        for (LightTaskState taskState : lightTaskStateList) {
-            if (Objects.equals(lightTaskState.getTaskId(), taskState.getTaskId())) {
-                thereIsLightTaskState = true;
-                taskState.setTaskId(lightTaskState.getTaskId());
-                taskState.setLoopCount(lightTaskState.getLoopCount());
-                taskState.setEncrypted(lightTaskState.getEncrypted());
+        for (MiddlewareTask middlewareTask : taskList){
+            if (middlewareTask.getMiddlewareID() == midd_id){
+                LightTask task = (LightTask) middlewareTask.getTask();
+                task.setLoopCount(lightTaskState.getLoopCount());
+                task.setEncrypted(lightTaskState.getEncrypted());
             }
         }
-        if (!thereIsLightTaskState)
-            lightTaskStateList.add(lightTaskState);
 
         return new ResponseEntity<>(lightTaskState, HttpStatus.OK);
     }
 
     /**
-     * This method gets the message of the fog node and updates the info about the medium task, if any, otherwise
-     * it creates an element for the array of the medium tasks in execution
+     * Questo metodo aggiorna un medium task con lo stato ricevuto dal fogNode.
      * @param mediumTaskState is the object with all the info about the state of the medium task
      * @return a medium task state
      */
-    @RequestMapping(path = "medium", method = RequestMethod.POST)
-    public ResponseEntity<MediumTaskState> mediumTaskState(@RequestBody MediumTaskState mediumTaskState) throws IOException {
+    @RequestMapping(path = "medium/{midd_id}", method = RequestMethod.POST)
+    public ResponseEntity<MediumTaskState> mediumTaskState(@PathVariable int midd_id, @RequestBody MediumTaskState mediumTaskState) throws IOException {
 
-        //System.out.println("State: " + mediumTaskState.getState() + ", Time: " + mediumTaskState.getCurrentTime());
+        ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
 
-        ArrayList<MediumTaskState> mediumTaskStateList = TaskHandler.getInstance().getMediumTaskStateList();
-        Boolean thereIsMediumTaskState = false;
-
-        for (MediumTaskState taskState: mediumTaskStateList) {
-            if (Objects.equals(taskState.getTaskId(), mediumTaskState.getTaskId())) {
-                thereIsMediumTaskState = true;
-                taskState.setTaskId(mediumTaskState.getTaskId());
-                taskState.setCurrentTime(mediumTaskState.getCurrentTime());
-                taskState.setState(mediumTaskState.getState());
+        for (MiddlewareTask middlewareTask : taskList){
+            if (middlewareTask.getMiddlewareID() == midd_id){
+                //aggiorna il task con lo stato corrente
+                MediumTask task = (MediumTask) middlewareTask.getTask();
+                task.setCurrentTime(mediumTaskState.getCurrentTime());
+                task.setState(mediumTaskState.getState());
             }
         }
-        if (!thereIsMediumTaskState)
-            mediumTaskStateList.add(mediumTaskState);
 
         return new ResponseEntity<>(mediumTaskState, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "heavy", method = RequestMethod.POST)
-    public ResponseEntity<HeavyTaskState> heavyTaskState(@RequestBody HeavyTaskState heavyTaskState) throws IOException {
 
-        //System.out.println("State: " + mediumTaskState.getState() + ", Time: " + mediumTaskState.getCurrentTime());
+    /**
+     * Questo metodo aggiorna un heavy task con lo stato ricevuto dal fogNode.
+     * @param heavyTaskState is the object with all the info about the state of the heavy task
+     * @return an heavy task state
+     */
+    //TODO rimuovi la risposta al fognode
+    @RequestMapping(path = "heavy/{midd_id}", method = RequestMethod.POST)
+    public ResponseEntity<HeavyTaskState> heavyTaskState(@PathVariable int midd_id, @RequestBody HeavyTaskState heavyTaskState) throws IOException {
 
-        ArrayList<HeavyTaskState> heavyTaskStateList = TaskHandler.getInstance().getHeavyTaskStateList();
-        Boolean thereIsHeavyTaskState = false;
+        ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
 
-        for (HeavyTaskState taskState: heavyTaskStateList) {
-            if (Objects.equals(taskState.getTaskId(), heavyTaskState.getTaskId())) {
-                thereIsHeavyTaskState = true;
-                taskState.setTaskId(heavyTaskState.getTaskId());
-                //TODO da adattare per l'heavyTask
-                /*
-                taskState.setCurrentTime(heavyTaskState.getCurrentTime());
-                taskState.setState(heavyTaskState.getState());
-                */
+        for (MiddlewareTask middlewareTask : taskList){
+            if (middlewareTask.getMiddlewareID() == midd_id){
+                HeavyTask task = (HeavyTask) middlewareTask.getTask();
+                task.setPartial(heavyTaskState.getPartial());
+                task.setLast(heavyTaskState.getLast());
             }
         }
-        if (!thereIsHeavyTaskState)
-            heavyTaskStateList.add(heavyTaskState);
 
         return new ResponseEntity<>(heavyTaskState, HttpStatus.OK);
     }

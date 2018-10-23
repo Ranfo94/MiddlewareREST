@@ -1,11 +1,9 @@
 package MiddlewareProject.handler;
 
-import MiddlewareProject.entities.FogNode;
-import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MediumTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MediumTask;
+import MiddlewareProject.entities.HeavyTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,19 +15,19 @@ public class RequestHandler {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    public LightTask sendLightPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+    public LightTask sendLightPostRequest(String requestUrl, String payload) throws IOException {
         StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), LightTask.class);
     }
 
-    public MediumTask sendMediumPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+    public MediumTask sendMediumPostRequest(String requestUrl, String payload) throws IOException {
         StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), MediumTask.class);
     }
 
-    public HeavyTask sendHeavyPostRequest(String requestUrl, String payload, FogNode eligibleFogNode) throws IOException {
+    public HeavyTask sendHeavyPostRequest(String requestUrl, String payload) throws IOException {
         StringBuilder jsonString = new StringBuilder();
         sendPost(requestUrl, payload, jsonString);
         return mapper.readValue(jsonString.toString(), HeavyTask.class);
@@ -59,8 +57,8 @@ public class RequestHandler {
      * @param payload is te JSON object
      * @param jsonString
      */
-    private void sendPost(String requestUrl, String payload, StringBuilder jsonString) {
-        try {
+    private void sendPost(String requestUrl, String payload, StringBuilder jsonString) throws IOException {
+
             URL url = new URL(requestUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -79,9 +77,6 @@ public class RequestHandler {
             }
             br.close();
             connection.disconnect();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     public String sendGetRequest(String requestUrl) throws IOException {

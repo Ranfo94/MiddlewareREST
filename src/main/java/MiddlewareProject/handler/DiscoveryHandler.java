@@ -8,7 +8,6 @@ import MiddlewareProject.utils.RandomNumberGenerator;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
 class DiscoveryHandler {
 
     private FogNode eligibleFogNode = new FogNode();

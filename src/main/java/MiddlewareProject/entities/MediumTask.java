@@ -24,19 +24,11 @@ public class MediumTask extends Task {
         this.time = time;
     }
 
-    public Integer getState() {
-        return state;
-    }
+    public Integer getState() { return state; }
 
-    public void setState(Integer state) {
-        this.state = state;
-    }
+    public void setState(Integer state) { this.state = state; }
 
-    public Long getCurrentTime() {
-        return currentTime;
-    }
+    public Long getCurrentTime() { return currentTime; }
 
-    public void setCurrentTime(Long currentTime) {
-        this.currentTime = currentTime;
-    }
+    public void setCurrentTime(Long currentTime) { this.currentTime = currentTime; }
 }

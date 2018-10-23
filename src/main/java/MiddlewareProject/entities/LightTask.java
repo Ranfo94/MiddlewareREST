@@ -3,7 +3,6 @@ package MiddlewareProject.entities;
 public class LightTask extends Task {
 
     private String toEncrypt;
-    //stato del lightTask
     private String encrypted;
     private Integer loopCount;
 

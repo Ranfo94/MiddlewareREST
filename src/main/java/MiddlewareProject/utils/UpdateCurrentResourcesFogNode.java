@@ -1,6 +1,5 @@
 package MiddlewareProject.utils;
 
-
 import MiddlewareProject.entities.FogNode;
 import MiddlewareProject.handler.RegistrationHandler;
 

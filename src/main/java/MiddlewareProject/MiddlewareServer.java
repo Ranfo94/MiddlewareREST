@@ -1,7 +1,7 @@
 package MiddlewareProject;
 
 import MiddlewareProject.handler.ActiveFogNodesHandler;
-import MiddlewareProject.handler.BusyFogNodesHandler;
+import MiddlewareProject.handler.WorkerFogNodesHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,14 +13,9 @@ public class MiddlewareServer {
 
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
-
+/*
         WorkerFogNodesHandler workerFogNodesHandler = new WorkerFogNodesHandler();
         workerFogNodesHandler.checkWorkerFogNode();
-
-        //ToBePerformedTaskHandler toBePerformedTaskHandler = new ToBePerformedTaskHandler();
-        //toBePerformedTaskHandler.executeToBePerformedTasks();
-        //TODO controllare busyFogNodeHandler
-        //BusyFogNodesHandler busyFogNodesHandler = new BusyFogNodesHandler();
-        //busyFogNodesHandler.checkWorkerFogNode();
+*/
     }
 }

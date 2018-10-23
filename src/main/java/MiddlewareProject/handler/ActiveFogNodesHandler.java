@@ -1,16 +1,9 @@
 package MiddlewareProject.handler;
 
 import MiddlewareProject.entities.FogNode;
-//import MiddlewareProject.utils.GetFogNodeStatus;
-import MiddlewareProject.task.MiddlewareTask;
-import MiddlewareProject.task.Task;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import MiddlewareProject.utils.GetFogNodeStatus;
 import java.util.ArrayList;
 import java.util.Objects;
-
 
 public class ActiveFogNodesHandler {
     private  ArrayList<FogNode> aliveFogNodes = new ArrayList<>();
@@ -23,37 +16,41 @@ public class ActiveFogNodesHandler {
     public void checkAlivesFogNodes(String print) {
         //In the creation of the Thread we replaced "new Runnable" with the lambda respective function "->"
         new Thread(() -> {
+            Long start = System.currentTimeMillis();
             while (true) {
                 try {
                     Thread.sleep(1000);
+
                     //ottengo una lista di nodi attivi
                     aliveFogNodes = RegistrationHandler.getInstance().getArrayListFogNode();
-                    for (FogNode aliveFogNode : aliveFogNodes) {
-                        new Thread(() -> {
-                            String requestUrl = "http://localhost:" + aliveFogNode.getPort() + "/active";
-                            try {
-                                //Integer aliveCode = getFogNodeStatus.getStatus(requestUrl);
-                                Integer aliveCode = getStatus(requestUrl);
+
+                        for (FogNode aliveFogNode : aliveFogNodes) {
+                            new Thread(() -> {
+                                String requestUrl = "http://localhost:" + aliveFogNode.getPort() + "/active";
+                                Integer aliveCode = getFogNodeStatus.getStatus(requestUrl);
+
                                 if (aliveCode != 200) {
-                                    RegistrationHandler.getInstance().getArrayListFogNode().remove(aliveFogNode.getId());
-                                    aliveFogNodes.remove(aliveFogNode.getId());
+                                    synchronized (aliveFogNodes) {
+                                        RegistrationHandler.getInstance().getArrayListFogNode().remove(aliveFogNode);
+                                        aliveFogNodes.remove(aliveFogNode);
+                                    }
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }).start();
-                    }
-                } catch (Exception e) {
+                            }).start();
+                        }
+                } catch(Exception e){
                     e.printStackTrace();
                 }
                 if (Objects.equals(print, "print")) {
                     synchronized (aliveFogNodes) {
-                        if (aliveFogNodes.size() != 0)
+                        if (aliveFogNodes.size() > 0) {
                             System.out.println("\nActives fog node: ");
-                        for (int i = 0; i < aliveFogNodes.size(); i++) {
-                            System.out.println(i + 1 + ". id: " + aliveFogNodes.get(i).getId() +
-                                    " - port: " + aliveFogNodes.get(i).getPort());
+                            for (int i = 0; i < aliveFogNodes.size(); i++) {
+                                System.out.println(i + 1 + ". id: " + aliveFogNodes.get(i).getId() +
+                                        " - port: " + aliveFogNodes.get(i).getPort());
+                            }
                         }
+                        else
+                            System.out.println("no active node");
                     }
                 }
             }

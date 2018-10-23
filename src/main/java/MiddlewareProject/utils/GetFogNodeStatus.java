@@ -1,9 +1,7 @@
 package MiddlewareProject.utils;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 
 public class GetFogNodeStatus {
 
@@ -13,7 +11,6 @@ public class GetFogNodeStatus {
      * @return the code of the ping response
      */
     public Integer getStatus(String url) {
-
         // It doesn't found the server, so the server is down
         Integer code = 404;
         try {

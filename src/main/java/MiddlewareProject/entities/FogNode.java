@@ -1,7 +1,5 @@
 package MiddlewareProject.entities;
 
-import MiddlewareProject.task.Type;
-
 public class FogNode {
     private Integer id;
     private Integer ram;
@@ -16,8 +14,8 @@ public class FogNode {
     private Integer currentStorage;
     private Double latitude;
     private Double longitude;
-
     private String powered;
+
 
     public FogNode() { }
 

@@ -1,9 +1,8 @@
 package MiddlewareProject.utils;
 
-
-import MiddlewareProject.task.HeavyTask;
-import MiddlewareProject.task.LightTask;
-import MiddlewareProject.task.MediumTask;
+import MiddlewareProject.entities.LightTask;
+import MiddlewareProject.entities.MediumTask;
+import MiddlewareProject.entities.HeavyTask;
 
 public class JsonBuilder {
 
@@ -29,10 +28,12 @@ public class JsonBuilder {
      * @return a string which represents the Json object
      */
     public String MediumTaskToJSON(MediumTask task){
-        String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() + "\", \"number\": \"" +
-                task.getNumber() + "\", \"consumption\" : " + task.getConsumption() + ", \"latitude\" : \"" +
-                task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\", \"state\" : " +
-                task.getState() + "}";
+        String payload="{ \"id\" : \"" + task.getID() + "\" ,\"state\" : \"" + task.getState() + "\", " +
+                "\"type\" : \"" + task.getType() + "\", \"time\" : \"" + task.getTime() + "\", " +
+                "\"currentTime\" : \"" + task.getCurrentTime() + "\"," +
+                "\"number\": \"" + task.getNumber() + "\", \"consumption\" : \"" + task.getConsumption() + "\"," +
+                "\"latitude\" : \"" + task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"," +
+                "\"state\" : \"" + task.getState() + "\"}";
         System.out.println(payload);
         return payload;
     }
@@ -46,8 +47,8 @@ public class JsonBuilder {
     public String HeavyTaskToJSON(HeavyTask task){
         String payload="{ \"id\" : \"" + task.getID() + "\" , \"type\" : \"" + task.getType() +"\" ,"+
                 " \"n\" : \""+ task.getN()+"\", \"partial\" : \""+task.getPartial()+"\", \"last\" : \""+task.getLast()+
-                "\", \"consumption\" : " + task.getConsumption() + ", \"response\" : \"\"" +
-                ", \"latitude\" : \"" + task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
+                "\", \"consumption\" : \"" + task.getConsumption() + "\", \"response\" : \""+task.getResponse()+"\"," +
+                " \"latitude\" : \"" + task.getLatitude() + "\", \"longitude\" : \"" + task.getLongitude() + "\"}";
         System.out.println(payload);
         return payload;
     }

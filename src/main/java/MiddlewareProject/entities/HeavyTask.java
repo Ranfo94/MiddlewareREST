@@ -34,6 +34,7 @@ public class HeavyTask extends Task {
     public int getLast() {
         return last;
     }
+
     public void setLast(int last) {
         this.last = last;
     }
