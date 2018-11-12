@@ -24,6 +24,13 @@ public class HeavyTaskService {
         }
 
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(middlewareTask);
+
+        HeavyTask task = (HeavyTask) res.getTask();
+        if(task.getLast() != -2){
+            //task completato senza interruzione, posso eliminarlo
+            TaskHandler.getInstance().removeTask(res);
+        }
+
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
 
     }

@@ -24,9 +24,10 @@ public class RegistrationService {
      * @return the entity of the response, in this case the fog node and the http status
      */
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public ResponseEntity<?> fogNodeRegistration(@RequestBody FogNode fogNode) {
+    public ResponseEntity<?> fogNodeRegistration(@RequestBody FogNode fogNode,HttpServletRequest request) {
 
         fogNode.setId(countMiddleware.incrementAndGet());
+        System.out.println("local: "+request.getLocalAddr() + "\nremote: "+request.getRemoteAddr()+"\nurl: "+request.getRemotePort());
         System.out.println("***** " + fogNode.getPort() + " " + fogNode.getId());
 
         RegistrationHandler.getInstance().addNodeToNodeList(fogNode);

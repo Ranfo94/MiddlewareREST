@@ -24,6 +24,13 @@ public class MediumTaskService {
         }
 
         MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(middlewareTask);
+
+        MediumTask task = (MediumTask) res.getTask();
+        if(task.getState() != -2){
+            //task completato senza interruzione, posso eliminarlo
+            TaskHandler.getInstance().removeTask(res);
+        }
+
         return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
     }
 

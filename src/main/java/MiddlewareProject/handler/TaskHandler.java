@@ -80,6 +80,9 @@ public class TaskHandler {
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/light/" + middlewareTask.getMiddlewareID();
 
+            //add to interruption list
+            InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),fogNodePort);
+
             try {
                 LightTask lightTask = requestHandler.sendLightPostRequest(requestUrl, payload);
                 middlewareTask.setTask(lightTask);
@@ -135,6 +138,9 @@ public class TaskHandler {
 
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/medium/" + middlewareTask.getMiddlewareID();
+
+            //add to interruption list
+            InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),fogNodePort);
 
             try {
                 MediumTask mediumTask = requestHandler.sendMediumPostRequest(requestUrl, payload);
@@ -192,6 +198,9 @@ public class TaskHandler {
             String fogNodePort = eligibleFogNode.getPort();
             String requestUrl = "http://localhost:" + fogNodePort + "/heavy/" + middlewareTask.getMiddlewareID();
 
+            //add to interruption list
+            InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),"http://localhost:" + fogNodePort);
+
             try {
                 HeavyTask heavyTask = requestHandler.sendHeavyPostRequest(requestUrl, payload);
                 middlewareTask.setTask(heavyTask);
@@ -214,7 +223,10 @@ public class TaskHandler {
             }
         }   else {
             System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/heavyCloud";
+            String requestUrl = "http://localhost:8090/heavyCloud/"+middlewareTask.getMiddlewareID();
+
+            //add to interruption list
+            InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),"http://localhost:8090");
 
             try {
                 HeavyTask heavyTask = requestHandler.sendCloudHeavyPostRequest(requestUrl, payload);
@@ -249,5 +261,22 @@ public class TaskHandler {
                     aTaskList.getTask().getID() + " task type : " + aTaskList.getTask().getType());
         }
         System.out.println("******************************************************");
+    }
+
+    public String sendInterruptionRequest(String urlString, int id) throws IOException {
+
+        String res = requestHandler.sendInterruptionRequest(urlString, id);
+        return res;
+
+    }
+
+    public boolean removeTask(MiddlewareTask task){
+        for (int i = 0; i < taskList.size(); i++) {
+            if(taskList.get(i).getMiddlewareID() == task.getMiddlewareID()){
+                taskList.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 }

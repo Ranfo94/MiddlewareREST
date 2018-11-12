@@ -19,6 +19,7 @@ public class FogNode {
 
     public FogNode() { }
 
+
     public Integer getId() {
         return id;
     }
