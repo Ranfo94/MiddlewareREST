@@ -106,7 +106,7 @@ public class TaskHandler {
         }   else {
             System.out.println("Non ci sono nodi disponibili al momento per eseguire questo task:" +
                     " verrà inviato direttamente al Cloud");
-            String requestUrl = "http://localhost:8090/lightCloud";
+            String requestUrl = "http://localhost:8090/lightCloud/"+middlewareTask.getMiddlewareID();
 
             try {
                 LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
@@ -166,7 +166,7 @@ public class TaskHandler {
         }   else {
             System.out.println("Non ci sono nodi disponibili al momento per eseguire questo task:" +
                     " verrà inviato direttamente al Cloud");
-            String requestUrl = "http://localhost:8090/mediumCloud";
+            String requestUrl = "http://localhost:8090/mediumCloud/"+middlewareTask.getMiddlewareID();
 
             try {
                 MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
