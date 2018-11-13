@@ -15,7 +15,7 @@ public class LightTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<LightTask> solveLightTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Mando il Light Task al nodo fog "+id);
+        System.out.println("Mando il Light Task "+id);
 
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 

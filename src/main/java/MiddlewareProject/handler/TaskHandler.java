@@ -15,10 +15,6 @@ public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
 
-    private ArrayList<LightTaskState> lightTaskStateList = new ArrayList<>();
-    private ArrayList<MediumTaskState> mediumTaskStateList = new ArrayList<>();
-    private ArrayList<HeavyTaskState> heavyTaskStateList = new ArrayList<>();
-
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
     private FogNode eligibleFogNode = new FogNode();

@@ -15,14 +15,12 @@ public class MediumTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Mando il Medium Task al nodo fog "+id);
-
+        System.out.println("Mando il Medium Task "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(middlewareTask);
         TaskHandler.getInstance().updateTask(res);
 
@@ -31,7 +29,6 @@ public class MediumTaskService {
             //task completato senza interruzione, posso eliminarlo
             TaskHandler.getInstance().removeTask(res);
         }
-
         return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
     }
 

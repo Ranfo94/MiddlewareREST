@@ -22,9 +22,6 @@ class DiscoveryHandler {
     private Integer mediumThreshold = 200;
     private Integer heavyThreshold = 400;
 
-    private String noFogNode = "Non ci sono nodi fog disponibili al momento per eseguire questo task: " +
-            "verrà inserito in una lista in attesa di un nodo fog disponibile.";
-
     /**This method returns the fog node eligible to solve a specific task
      * @param policy is the chosen policy (random or the other)
      * @return the fog node eligible to solve a specific task
@@ -108,7 +105,6 @@ class DiscoveryHandler {
             }
         }
         if (!thereIsRandomFogNode) {
-            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
@@ -148,7 +144,6 @@ class DiscoveryHandler {
             rrHeavyCounter = rrObject.getRoundRobinCounter();
         }
         if (!thereIsRRFogNode) {
-            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
@@ -189,7 +184,6 @@ class DiscoveryHandler {
                 thereIsSaveBatteryFogNode = true;
         }
         if (!thereIsSaveBatteryFogNode) {
-            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
         return eligibleFogNode;
@@ -239,7 +233,6 @@ class DiscoveryHandler {
                 eligibleFogNode = null;
         }
         if (!thereIsDistanceFogNode) {
-            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
 
@@ -284,12 +277,10 @@ class DiscoveryHandler {
                 thereIsComplexFogNode = true;
         }
         if (!thereIsComplexFogNode) {
-            System.out.println(noFogNode);
             eligibleFogNode = null;
         }
 
         return eligibleFogNode;
-
     }
 
     /**

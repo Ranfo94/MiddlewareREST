@@ -15,25 +15,20 @@ public class HeavyTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<HeavyTask> solveHeavyTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Mando l'Heavy Task al nodo fog "+id);
+        System.out.println("Mando l'Heavy Task "+id);
 
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
-
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(middlewareTask);
         TaskHandler.getInstance().updateTask(res);
-
         HeavyTask task = (HeavyTask) res.getTask();
         if(task.getLast() == -2){
             //task completato senza interruzione, posso eliminarlo
             TaskHandler.getInstance().removeTask(res);
         }
-
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
-
     }
 
     @RequestMapping(path = "register", method = RequestMethod.POST)

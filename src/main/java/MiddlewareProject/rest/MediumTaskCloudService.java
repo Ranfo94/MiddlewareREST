@@ -25,9 +25,7 @@ public class MediumTaskCloudService {
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(middlewareTask);
-
         return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
     }
 }

@@ -25,9 +25,7 @@ public class LightTaskCloudService{
         if (middlewareTask == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
-
         return new ResponseEntity<>((LightTask) res.getTask(), HttpStatus.OK);
     }
 }

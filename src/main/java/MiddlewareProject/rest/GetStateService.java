@@ -30,7 +30,6 @@ public class GetStateService {
                 task.setEncrypted(lightTaskState.getEncrypted());
             }
         }
-
         return new ResponseEntity<>(lightTaskState, HttpStatus.OK);
     }
 
@@ -52,7 +51,6 @@ public class GetStateService {
                 task.setState(mediumTaskState.getState());
             }
         }
-
         return new ResponseEntity<>(mediumTaskState, HttpStatus.OK);
     }
 
@@ -74,7 +72,6 @@ public class GetStateService {
                 task.setLast(heavyTaskState.getLast());
             }
         }
-
         return new ResponseEntity<>(heavyTaskState, HttpStatus.OK);
     }
 }

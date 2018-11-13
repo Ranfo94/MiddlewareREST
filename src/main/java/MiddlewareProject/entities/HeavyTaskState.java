@@ -10,6 +10,7 @@ public class HeavyTaskState {
 
     public HeavyTaskState() {
     }
+
     public HeavyTaskState(Integer taskId) { this.taskId = taskId; }
 
     public Integer getTaskId() {
@@ -27,5 +28,4 @@ public class HeavyTaskState {
     public int getLast() { return last; }
 
     public void setLast(int last) { this.last = last; }
-
 }
