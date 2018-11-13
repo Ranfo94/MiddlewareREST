@@ -62,7 +62,6 @@ public class GetStateService {
      * @param heavyTaskState is the object with all the info about the state of the heavy task
      * @return an heavy task state
      */
-    //TODO rimuovi la risposta al fognode
     @RequestMapping(path = "heavy/{midd_id}", method = RequestMethod.POST)
     public ResponseEntity<HeavyTaskState> heavyTaskState(@PathVariable int midd_id, @RequestBody HeavyTaskState heavyTaskState) throws IOException {
 

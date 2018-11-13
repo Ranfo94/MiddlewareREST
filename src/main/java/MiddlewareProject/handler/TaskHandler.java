@@ -208,6 +208,10 @@ public class TaskHandler {
                 //CRASH DI UN NODO
                 System.out.println("NODO CRASHATO!");
                 MiddlewareTask updatedTask = taskList.get(taskList.indexOf(middlewareTask));
+                /*
+                HeavyTask heavyTask = (HeavyTask) updatedTask.getTask();
+                System.out.println("partial: "+heavyTask.getPartial());
+                */
                 sendHeavyTask(updatedTask);
             }
             catch (Exception e){
@@ -278,5 +282,25 @@ public class TaskHandler {
             }
         }
         return false;
+    }
+
+    public void updateTask(MiddlewareTask task){
+
+        for (int i = 0; i < taskList.size() ; i++) {
+            if(taskList.get(i).getMiddlewareID() == task.getMiddlewareID()) {
+                taskList.remove(i);
+                taskList.add(task);
+            }
+        }
+
+    }
+
+    public void printPartial(int id){
+        for (int i = 0; i < taskList.size() ; i++) {
+            if(taskList.get(i).getMiddlewareID() == id) {
+                HeavyTask ht = (HeavyTask) taskList.get(i).getTask();
+                System.out.println("partial "+ht.getPartial());
+            }
+        }
     }
 }

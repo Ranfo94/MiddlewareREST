@@ -7,7 +7,7 @@ public class HeavyTask extends Task {
     private int n;
     private BigInteger partial;
     private BigInteger response;
-    private int last = 0;
+    private int last;
 
     public BigInteger getResponse() {
         return response;

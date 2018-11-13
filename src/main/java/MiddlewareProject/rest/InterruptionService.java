@@ -36,7 +36,6 @@ public class InterruptionService {
         //interruption request
         String res = TaskHandler.getInstance().sendInterruptionRequest(nodePort,id);
 
-
         return new ResponseEntity<>(res, HttpStatus.OK);
 
     }
@@ -79,12 +78,11 @@ public class InterruptionService {
         //retrieving the task
         ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
         MiddlewareTask resumeTask = null;
-        for (int i = 0; i < taskList.size(); i++) {
-            if(taskList.get(i).getMiddlewareID() == id){
-                resumeTask = taskList.get(i);
+        for (MiddlewareTask middlewareTask : taskList){
+            if (middlewareTask.getMiddlewareID() == id){
+                resumeTask = middlewareTask;
             }
         }
-
 
         MiddlewareTask res = TaskHandler.getInstance().sendMediumTask(resumeTask);
 
@@ -103,12 +101,18 @@ public class InterruptionService {
 
         //retrieving the task
         ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
+
         MiddlewareTask resumeTask = null;
-        for (int i = 0; i < taskList.size(); i++) {
-            if(taskList.get(i).getMiddlewareID() == id){
-                resumeTask = taskList.get(i);
+        for (MiddlewareTask middlewareTask : taskList){
+            if (middlewareTask.getMiddlewareID() == id){
+               resumeTask = middlewareTask;
             }
         }
+
+        /*
+        HeavyTask task = (HeavyTask) resumeTask.getTask();
+        System.out.println("state -> partial: "+ task.getPartial() + ", last: "+task.getLast()+"\n");
+*/
 
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(resumeTask);
 

@@ -24,9 +24,10 @@ public class HeavyTaskService {
         }
 
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(middlewareTask);
+        TaskHandler.getInstance().updateTask(res);
 
         HeavyTask task = (HeavyTask) res.getTask();
-        if(task.getLast() != -2){
+        if(task.getLast() == -2){
             //task completato senza interruzione, posso eliminarlo
             TaskHandler.getInstance().removeTask(res);
         }
@@ -39,7 +40,6 @@ public class HeavyTaskService {
     public ResponseEntity<Integer> registerHeavyTask(@RequestBody HeavyTask heavyTask) throws IOException {
 
         //Invia ACK al client
-        //responseWriter.sendResponse("Processing Task...",response);
         System.out.println("Task da registrare : "+heavyTask.getID()+ " response: "+heavyTask.getResponse());
 
         TaskHandler taskHandler = TaskHandler.getInstance();

@@ -6,7 +6,7 @@ public class HeavyTaskState {
 
     private Integer taskId;
     private BigInteger partial;
-    private int last = 0;
+    private int last;
 
     public HeavyTaskState() {
     }

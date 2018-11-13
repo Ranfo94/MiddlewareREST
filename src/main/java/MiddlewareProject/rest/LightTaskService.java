@@ -24,9 +24,10 @@ public class LightTaskService {
         }
 
         MiddlewareTask res = TaskHandler.getInstance().sendLightTask(middlewareTask);
+        TaskHandler.getInstance().updateTask(res);
 
         LightTask task = (LightTask) res.getTask();
-        if(task.getLoopCount() != -2){
+        if(task.getLoopCount() == -2){
             //task completato senza interruzione, posso eliminarlo
             TaskHandler.getInstance().removeTask(res);
         }
