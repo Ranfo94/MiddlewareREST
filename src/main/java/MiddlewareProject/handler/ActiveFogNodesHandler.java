@@ -26,7 +26,9 @@ public class ActiveFogNodesHandler {
 
                         for (FogNode aliveFogNode : aliveFogNodes) {
                             new Thread(() -> {
+                                //todo indirizzo fogNode
                                 String requestUrl = "http://localhost:" + aliveFogNode.getPort() + "/active";
+                                //String requestUrl = aliveFogNode.getAddr() + aliveFogNode.getPort() + "/active";
                                 Integer aliveCode = getFogNodeStatus.getStatus(requestUrl);
 
                                 if (aliveCode != 200) {
