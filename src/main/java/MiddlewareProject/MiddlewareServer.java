@@ -14,12 +14,9 @@ public class MiddlewareServer {
         SpringApplication.run(MiddlewareServer.class, args);
 
         //todo correggere errore su schermo quando non trova un nodo e invia al cloud
-
-        InetAddress IP=InetAddress.getLocalHost();
-        System.out.println("IP of my system is := "+IP.getHostAddress());
-
-
+/*
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
+*/
     }
 }

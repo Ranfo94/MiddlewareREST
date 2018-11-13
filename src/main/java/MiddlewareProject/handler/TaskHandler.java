@@ -15,10 +15,6 @@ public class TaskHandler {
 
     private ArrayList<MiddlewareTask> taskList = new ArrayList<>();
 
-    private ArrayList<LightTaskState> lightTaskStateList = new ArrayList<>();
-    private ArrayList<MediumTaskState> mediumTaskStateList = new ArrayList<>();
-    private ArrayList<HeavyTaskState> heavyTaskStateList = new ArrayList<>();
-
     private DiscoveryHandler discoveryHandler = new DiscoveryHandler();
     private UpdateCurrentResourcesFogNode ucrfn = new UpdateCurrentResourcesFogNode();
     private FogNode eligibleFogNode = new FogNode();
@@ -27,7 +23,16 @@ public class TaskHandler {
     private JsonBuilder jsonBuilder;
     private RequestHandler requestHandler;
 
-    private String policy = "save-the-battery"; //TODO la politica va scelta dinamicamente
+    //todo indirizzo cloud
+    public String cloudIp = "a798ee2f2df9211e8b53d0267b98ef8b-757972766.us-east-2.elb.amazonaws.com";
+
+    //TODO la politica va scelta dinamicamente
+    private String policy = "save-the-battery";
+    //private String policy;
+
+    public void setPolicy(String policy){ this.policy = policy; }
+
+    public String getPolicy(){ return policy; }
 
     public static TaskHandler getInstance() {
         return ourInstance;
@@ -78,7 +83,11 @@ public class TaskHandler {
             }
 
             String fogNodePort = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + fogNodePort + "/light/" + middlewareTask.getMiddlewareID();
+
+            //TODO indirizzo nodo
+            String requestUrl = "http://localhost:8070/light/" + middlewareTask.getMiddlewareID();
+            //String requestUrl = "http://" + fogNodePort + "/light/" + middlewareTask.getMiddlewareID();
+            System.out.println("url :" + requestUrl);
 
             //add to interruption list
             InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),fogNodePort);
@@ -105,7 +114,8 @@ public class TaskHandler {
             }
         }   else {
             System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/lightCloud";
+            //String requestUrl = "http://localhost:8090/lightCloud";
+            String requestUrl = "http://" + cloudIp + ":8090/lightCloud";
 
             try {
                 LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
@@ -137,7 +147,8 @@ public class TaskHandler {
             }
 
             String fogNodePort = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + fogNodePort + "/medium/" + middlewareTask.getMiddlewareID();
+            //String requestUrl = "http://localhost:" + fogNodePort + "/medium/" + middlewareTask.getMiddlewareID();
+            String requestUrl = "http://localhost:8070/medium/" + middlewareTask.getMiddlewareID();
 
             //add to interruption list
             InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),fogNodePort);
@@ -196,7 +207,8 @@ public class TaskHandler {
             }
 
             String fogNodePort = eligibleFogNode.getPort();
-            String requestUrl = "http://localhost:" + fogNodePort + "/heavy/" + middlewareTask.getMiddlewareID();
+            //String requestUrl = "http://localhost:" + fogNodePort + "/heavy/" + middlewareTask.getMiddlewareID();
+            String requestUrl = "http://localhost:8070/heavy/" + middlewareTask.getMiddlewareID();
 
             //add to interruption list
             InterruptionHandler.getInstance().addToList(middlewareTask.getMiddlewareID(),"http://localhost:" + fogNodePort);
