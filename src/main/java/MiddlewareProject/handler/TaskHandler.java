@@ -223,11 +223,6 @@ public class TaskHandler {
                 //CRASH DI UN NODO
                 System.out.println("NODO CRASHATO!");
                 MiddlewareTask updatedTask = taskList.get(taskList.indexOf(middlewareTask));
-                //todo cancellare
-                /*
-                HeavyTask heavyTask = (HeavyTask) updatedTask.getTask();
-                System.out.println("partial: "+heavyTask.getPartial());
-                */
                 sendHeavyTask(updatedTask);
             }
             catch (Exception e){
