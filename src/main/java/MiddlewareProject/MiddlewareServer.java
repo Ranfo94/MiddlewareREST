@@ -14,9 +14,9 @@ public class MiddlewareServer {
         SpringApplication.run(MiddlewareServer.class, args);
 
         //todo correggere errore su schermo quando non trova un nodo e invia al cloud
-/*
+
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
-*/
+
     }
 }

@@ -97,7 +97,7 @@ public class InterruptionService {
     @RequestMapping("resumeheavy/{id}")
     public ResponseEntity<HeavyTask> resumeHeavyTask(@PathVariable int id, HttpServletRequest request){
 
-        System.out.println("richiesta di ripresa task "+id+"\n");
+        System.out.println("richiesta di ripresa task " + id + "\n");
 
         //retrieving the task
         ArrayList<MiddlewareTask> taskList = TaskHandler.getInstance().getTaskList();
@@ -109,11 +109,10 @@ public class InterruptionService {
             }
         }
 
-        /*
+/*
         HeavyTask task = (HeavyTask) resumeTask.getTask();
-        System.out.println("state -> partial: "+ task.getPartial() + ", last: "+task.getLast()+"\n");
+        System.out.println("state -> partial: " + task.getPartial() + ", last: " + task.getLast()+"\n");
 */
-
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(resumeTask);
 
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
