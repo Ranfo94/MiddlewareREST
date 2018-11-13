@@ -17,6 +17,5 @@ public class MiddlewareServer {
 
         ActiveFogNodesHandler activeFogNodesHandler = new ActiveFogNodesHandler();
         activeFogNodesHandler.checkAlivesFogNodes("no-print");
-
     }
 }
