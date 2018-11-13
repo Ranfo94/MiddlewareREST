@@ -15,7 +15,7 @@ public class MediumTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Sending medium task "+id);
+        System.out.println("Mando il Medium Task al nodo fog "+id);
 
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
@@ -39,6 +39,7 @@ public class MediumTaskService {
     public ResponseEntity<Integer> registerMediumTask(@RequestBody MediumTask mediumTask) throws IOException {
 
         //Invia ACK al client
+        System.out.println("\n------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Task da registrare : "+mediumTask.getID()+ " number: "+mediumTask.getNumber());
 
         TaskHandler taskHandler = TaskHandler.getInstance();

@@ -31,7 +31,7 @@ public class RegistrationHandler {
     }
 
     public void printFogNodeList() {
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------");
         for (FogNode anArrayListFogNode : arrayListFogNode) {
             System.out.println("FogNode: id = " + anArrayListFogNode.getId() + "; type = " +
                     anArrayListFogNode.getType() + "; CPU = " + anArrayListFogNode.getCpu() + "; RAM = " +
@@ -40,6 +40,6 @@ public class RegistrationHandler {
                     anArrayListFogNode.getLatitude() + "; longitude = " + anArrayListFogNode.getLongitude() +
                     "; powered = " + anArrayListFogNode.getPowered());
         }
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 }

@@ -23,7 +23,7 @@ public class HeavyTaskCloudService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<HeavyTask> solveHeavyCloudTask(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        System.out.println("Sending heavy task to Cloud "+id);
+        System.out.println("Mando l'Heavy Task al Cloud "+id);
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
         if (middlewareTask == null){
