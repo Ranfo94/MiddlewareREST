@@ -105,9 +105,10 @@ public class TaskHandler {
             }
         }   else {
             System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/lightCloud";
+            String requestUrl = "http://localhost:8090/lightCloud/"+middlewareTask.getMiddlewareID();
 
             try {
+
                 LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
                 System.out.println("********************");
                 System.out.println(lightTask.getEncrypted());
@@ -164,7 +165,7 @@ public class TaskHandler {
             }
         }   else {
             System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/mediumCloud";
+            String requestUrl = "http://localhost:8090/mediumCloud"+middlewareTask.getMiddlewareID();
 
             try {
                 MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
