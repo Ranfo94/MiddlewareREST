@@ -15,7 +15,7 @@ public class LightTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<LightTask> solveLightTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Sending light task "+id);
+        System.out.println("Mando il Light Task al nodo fog "+id);
 
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
@@ -39,6 +39,7 @@ public class LightTaskService {
     public ResponseEntity<Integer> registerLightTask(@RequestBody LightTask lightTask) throws IOException {
 
         //Invia ACK al client
+        System.out.println("\n------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Task da registrare : "+lightTask.getID()+ " string: "+lightTask.getToEncrypt());
 
         TaskHandler taskHandler = TaskHandler.getInstance();

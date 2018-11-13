@@ -15,7 +15,7 @@ public class HeavyTaskService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<HeavyTask> solveHeavyTask(@PathVariable int id) throws IOException {
 
-        System.out.println("Sending heavy task "+id);
+        System.out.println("Mando l'Heavy Task al nodo fog "+id);
 
         MiddlewareTask middlewareTask = TaskHandler.getInstance().searchTaskByID(id);
 
@@ -40,6 +40,7 @@ public class HeavyTaskService {
     public ResponseEntity<Integer> registerHeavyTask(@RequestBody HeavyTask heavyTask) throws IOException {
 
         //Invia ACK al client
+        System.out.println("\n------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Task da registrare : "+heavyTask.getID()+ " response: "+heavyTask.getResponse());
 
         TaskHandler taskHandler = TaskHandler.getInstance();
