@@ -104,11 +104,11 @@ public class TaskHandler {
                 }
             }
         }   else {
-            System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/lightCloud/"+middlewareTask.getMiddlewareID();
+            System.out.println("Non ci sono nodi disponibili al momento per eseguire questo task:" +
+                    " verrà inviato direttamente al Cloud");
+            String requestUrl = "http://localhost:8090/lightCloud";
 
             try {
-
                 LightTask lightTask = requestHandler.sendCloudLightPostRequest(requestUrl, payload);
                 System.out.println("********************");
                 System.out.println(lightTask.getEncrypted());
@@ -164,8 +164,9 @@ public class TaskHandler {
                 }
             }
         }   else {
-            System.out.println("non ci sono nodi disponibili");
-            String requestUrl = "http://localhost:8090/mediumCloud"+middlewareTask.getMiddlewareID();
+            System.out.println("Non ci sono nodi disponibili al momento per eseguire questo task:" +
+                    " verrà inviato direttamente al Cloud");
+            String requestUrl = "http://localhost:8090/mediumCloud";
 
             try {
                 MediumTask mediumTask = requestHandler.sendCloudMediumPostRequest(requestUrl, payload);
@@ -227,7 +228,8 @@ public class TaskHandler {
                 }
             }
         }   else {
-            System.out.println("non ci sono nodi disponibili");
+            System.out.println("Non ci sono nodi disponibili al momento per eseguire questo task:" +
+                    " verrà inviato direttamente al Cloud");
             String requestUrl = "http://localhost:8090/heavyCloud/"+middlewareTask.getMiddlewareID();
 
             //add to interruption list
