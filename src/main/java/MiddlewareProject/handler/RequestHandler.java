@@ -93,6 +93,13 @@ public class RequestHandler {
         return result.toString();
     }
 
+    /**
+     * This method sends an interruption request to the fog node that is currently processing the task
+     * @param urlString : fog node address
+     * @param id : task id
+     * @return
+     * @throws IOException
+     */
     public String sendInterruptionRequest(String urlString, int id) throws IOException {
         String requestUrl = urlString +"/interruption/"+id;
         StringBuilder result = new StringBuilder();

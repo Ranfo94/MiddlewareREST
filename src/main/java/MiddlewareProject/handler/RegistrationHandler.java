@@ -23,7 +23,7 @@ public class RegistrationHandler {
     }
 
 
-    /**This method add the registrated fog nodes into the list of the active fog nodes
+    /**This method adds the registrated fog nodes into the list of the active fog nodes
      * @param fogNode is the node to be added in the list of the active fog nodes
      */
     public void addNodeToNodeList(FogNode fogNode) {

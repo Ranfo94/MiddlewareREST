@@ -68,6 +68,13 @@ public class TaskHandler {
         //printList();
     }
 
+
+    /**
+     * This method finds the eligble fog node (if theres no node available, it chooses the cloud) and sends the light task.
+     * @param middlewareTask : task
+     * @return : result
+     * @throws IOException
+     */
     public MiddlewareTask sendLightTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.LightTaskToJSON((LightTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
@@ -133,7 +140,12 @@ public class TaskHandler {
         }
         return middlewareTask;
     }
-
+    /**
+     * This method finds the eligble fog node (if theres no node available, it chooses the cloud) and sends the medium task.
+     * @param middlewareTask : task
+     * @return : result
+     * @throws IOException
+     */
     public MiddlewareTask sendMediumTask(MiddlewareTask middlewareTask) throws IOException {
         String payload = jsonBuilder.MediumTaskToJSON((MediumTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
@@ -194,7 +206,12 @@ public class TaskHandler {
         }
         return middlewareTask;
     }
-
+    /**
+     * This method finds the eligble fog node (if theres no node available, it chooses the cloud) and sends the heavy task.
+     * @param middlewareTask : task
+     * @return : result
+     * @throws IOException
+     */
     public MiddlewareTask sendHeavyTask(MiddlewareTask middlewareTask) {
         String payload = jsonBuilder.HeavyTaskToJSON((HeavyTask) middlewareTask.getTask());
         consumption = middlewareTask.getTask().getConsumption();
@@ -259,6 +276,11 @@ public class TaskHandler {
         return middlewareTask;
     }
 
+    /**
+     * this method searches for the task matching the id in the list
+     * @param id
+     * @return
+     */
     public MiddlewareTask searchTaskByID(int id){
         for (MiddlewareTask aTaskList : taskList) {
             if (aTaskList.getMiddlewareID() == id) {
@@ -279,6 +301,13 @@ public class TaskHandler {
         System.out.println("******************************************************");
     }
 
+    /**
+     * this method calls for the interruption request
+     * @param urlString
+     * @param id
+     * @return
+     * @throws IOException
+     */
     public String sendInterruptionRequest(String urlString, int id) throws IOException {
 
         String res = requestHandler.sendInterruptionRequest(urlString, id);

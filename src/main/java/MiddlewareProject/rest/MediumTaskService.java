@@ -12,6 +12,9 @@ import java.io.IOException;
 @RequestMapping(path = "medium")
 public class MediumTaskService {
 
+    /**
+     * REST method: device asks for its task to be resolved
+     */
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<MediumTask> solveMediumTask(@PathVariable int id) throws IOException {
 
@@ -31,7 +34,9 @@ public class MediumTaskService {
         }
         return new ResponseEntity<>((MediumTask) res.getTask(), HttpStatus.OK);
     }
-
+    /**
+     * REST method: device registers its task
+     */
     @RequestMapping(path = "register", method = RequestMethod.POST)
     public ResponseEntity<Integer> registerMediumTask(@RequestBody MediumTask mediumTask) throws IOException {
 

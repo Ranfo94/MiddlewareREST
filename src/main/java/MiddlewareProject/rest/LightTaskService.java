@@ -12,6 +12,9 @@ import java.io.IOException;
 @RequestMapping(path = "light")
 public class LightTaskService {
 
+    /**
+     * REST method: device asks for its task to be resolved
+     */
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<LightTask> solveLightTask(@PathVariable int id) throws IOException {
 
@@ -35,6 +38,9 @@ public class LightTaskService {
         return new ResponseEntity<>((LightTask)res.getTask(), HttpStatus.OK);
     }
 
+    /**
+     * REST method: device registers its task
+     */
     @RequestMapping(path = "register", method = RequestMethod.POST)
     public ResponseEntity<Integer> registerLightTask(@RequestBody LightTask lightTask) throws IOException {
 
