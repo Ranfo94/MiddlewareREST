@@ -70,7 +70,7 @@ public class GetStateService {
                 HeavyTask task = (HeavyTask) middlewareTask.getTask();
                 task.setPartial(heavyTaskState.getPartial());
                 task.setLast(heavyTaskState.getLast());
-                System.out.println(task.getLast() + " " + task.getPartial());
+            //    System.out.println(task.getLast() + " " + task.getPartial());
             }
         }
         return new ResponseEntity<>(heavyTaskState, HttpStatus.OK);

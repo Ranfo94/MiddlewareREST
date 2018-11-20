@@ -30,12 +30,15 @@ public class InterruptionService {
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     public ResponseEntity<String> interruptTask(@PathVariable int id) throws IOException {
 
+        System.out.println("Interruption Request..");
+
         //identify the FogNode that's currently processing the task
         String nodePort = InterruptionHandler.getInstance().getPortByTask(id);
 
         //interruption request
         String res = TaskHandler.getInstance().sendInterruptionRequest(nodePort,id);
 
+        System.out.println("Interruption result for task "+id+ " : "+res);
         return new ResponseEntity<>(res, HttpStatus.OK);
 
     }
@@ -101,12 +104,14 @@ public class InterruptionService {
             }
         }
 
-/*
         HeavyTask task = (HeavyTask) resumeTask.getTask();
         System.out.println("state -> partial: " + task.getPartial() + ", last: " + task.getLast()+"\n");
-*/
+
+
         MiddlewareTask res = TaskHandler.getInstance().sendHeavyTask(resumeTask);
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
+     //   return new ResponseEntity<>(task, HttpStatus.OK);
+
 
     }
 

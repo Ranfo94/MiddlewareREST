@@ -28,8 +28,11 @@ public class HeavyTaskService {
         TaskHandler.getInstance().updateTask(res);
         HeavyTask task = (HeavyTask) res.getTask();
         if(task.getLast() == -2){
+            System.out.println("task completato, lo elimino dal sistema");
             //task completato senza interruzione, posso eliminarlo
             TaskHandler.getInstance().removeTask(res);
+        }else{
+            System.out.println("task interrotto, non lo elimino");
         }
         return new ResponseEntity<>((HeavyTask) res.getTask(), HttpStatus.OK);
     }
